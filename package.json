@@ -1,0 +1,10 @@
+{
+  "name": "compcom-cli",
+  "version": "1.0.0",
+  "description": "A command-line alternative to Lancer RPS's Compcon web-app",
+  "main": "src/index.ts",
+  "repository": "git@github.com:bhirsch42/compcom-cli.git",
+  "author": "Ben Hirsch <benhirsch42@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
