@@ -12,4 +12,4 @@ const StatusBar: React.FC = () => {
   );
 };
 
-export StatusBar
+export default StatusBar;
