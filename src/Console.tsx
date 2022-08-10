@@ -27,12 +27,15 @@ const LogRenderers: Record<LogType, LogRenderer> = {
   ),
 };
 
-const Console: React.FC = () => {
-  const { state } = useStore();
+function sanitizeUserText(str: string) {
+  const endsWithSpace = str[str.length - 1] === " ";
+  const sanitizedText = str.trim().split(/\ +/).join(" ");
+  return `${sanitizedText}${endsWithSpace ? " " : ""}`;
+}
+
+const ConsoleInput: React.FC = () => {
   const [userText, setUserText] = React.useState("");
-  const { runCommand } = useRunCommand(userText);
-  const containerEl = React.useRef<DOMElement>(null);
-  const maxLineCount = containerEl.current?.yogaNode?.getComputedHeight() || 5;
+  const { runCommand, runCompletion, completion } = useRunCommand(userText);
 
   const { setRawMode } = useStdin();
 
@@ -48,17 +51,42 @@ const Console: React.FC = () => {
       setUserText(userText.slice(0, userText.length - 1));
     } else if (key.return) {
       if (userText.length > 0) {
-        runCommand();
+        completion ? runCompletion() : runCommand();
         setUserText("");
       }
+    } else if (key.tab) {
+      if (completion) {
+        setUserText(completion.value);
+      }
     } else {
-      setUserText(`${userText}${input}`);
+      setUserText(sanitizeUserText(`${userText}${input}`));
     }
   });
 
+  return (
+    <Box>
+      <Text>
+        {"> "}
+        {userText}
+        {"‸"}
+      </Text>
+      <Box position="relative" marginLeft={-1}>
+        <Text dimColor>
+          {(completion ? completion.value : "").slice(userText.length)}
+        </Text>
+      </Box>
+    </Box>
+  );
+};
+
+const Console: React.FC = () => {
+  const { state } = useStore();
+  const containerEl = React.useRef<DOMElement>(null);
+  const maxLineCount = containerEl.current?.yogaNode?.getComputedHeight() || 5;
+
   const logs = reverse(
     slice(
-      Math.max(state.console.logs.length - maxLineCount - 2, 0),
+      Math.max(state.console.logs.length - maxLineCount + 4, 0),
       state.console.logs.length,
       state.console.logs
     )
@@ -66,20 +94,14 @@ const Console: React.FC = () => {
 
   return (
     <Box
-      borderStyle="single"
       paddingX={1}
-      width={32}
-      height={32}
+      width={48}
       flexDirection="column"
       justifyContent="flex-end"
       ref={containerEl}
     >
       <Box flexDirection="column-reverse">
-        <Text>
-          {"> "}
-          {userText}
-          {"‸"}
-        </Text>
+        <ConsoleInput />
         {logs.map((log) => LogRenderers[log.type](log))}
       </Box>
     </Box>

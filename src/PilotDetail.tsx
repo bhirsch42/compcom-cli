@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Text, Box, Newline } from "ink";
+import React from "react";
+import { Box } from "ink";
 import lancerData from "lancer-data";
 import { Pilot } from "./types/Pilot";
 import Skill from "./Skill";
@@ -11,7 +11,7 @@ import TypeyText from "./TypeyText";
 
 const { rules } = lancerData;
 
-const Pilot: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
+const PilotDetail: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
   const grit = Math.ceil(pilot.level / 2);
   const maxHp = rules.base_pilot_hp + grit;
   const eDefense = rules.base_pilot_edef;
@@ -68,4 +68,4 @@ const Pilot: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
   );
 };
 
-export default Pilot;
+export default PilotDetail;

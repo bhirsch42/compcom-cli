@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Text, Transform } from "ink";
 import { slice } from "ramda";
 import useTransformAnimation from "./hooks/useTransformAnimation";
@@ -19,9 +19,11 @@ const TypeyText: typeof Text = ({ children, ...props }) => {
       return str;
     }
 
-    return `${slice(0, endSlice, str)}${"░"}${" ".repeat(
-      Math.max(str.length - endSlice - 1, 0)
-    )}`;
+    const strStart = slice(0, endSlice, str);
+    const strEnd = slice(endSlice, str.length, str);
+    const fillEnd = strEnd.replaceAll(/./g, " ");
+
+    return `${strStart}${"░"}${fillEnd}`;
   });
 
   return (

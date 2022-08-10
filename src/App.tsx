@@ -1,47 +1,55 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, render, Text, useStdin } from "ink";
-import Pilot from "./Pilot";
 import { Route, Routes } from "./Router";
 import Compendium from "./Compendium";
 import Console from "./Console";
-import { useRunCommand } from "./hooks/useCliCommand";
-import { hideBin } from "yargs/helpers";
 import { CompconDataProvider, useCompconData } from "./hooks/useCompconData";
-import { StoreProvider, useStore } from "./hooks/useStore";
+import { StoreProvider } from "./hooks/useStore";
+import PilotPreview from "./PilotPreview";
+import PilotsPage from "./pages/PilotsPage";
 
 const App: React.FC = () => {
-  const { runCommand } = useRunCommand(hideBin(process.argv));
   const { isRawModeSupported } = useStdin();
-  const compconData = useCompconData();
-
-  const { store, state } = useStore();
-
-  // useEffect(() => {
-  //   runCommand();
-  // }, []);
 
   return (
     <Routes initRoute={[{ name: "pilots" }]}>
-      <Box>
-        <Box flexGrow={1}>
+      <Box height={process.stdout.rows - 2}>
+        <Box
+          flexGrow={1}
+          alignItems="stretch"
+          borderStyle="classic"
+          paddingX={1}
+          borderColor="greenBright"
+        >
+          <Box position="absolute" marginTop={-1} marginLeft={2}>
+            <Text color="greenBright">// HUD //</Text>
+          </Box>
+
           <Route path="pilots">
-            <Box>
-              {compconData.pilots.map((pilot) => (
-                <Pilot pilot={pilot} key={pilot.id} />
-              ))}
-            </Box>
+            <PilotsPage />
           </Route>
           <Route path="compendium">
             <Compendium />
           </Route>
         </Box>
-        {isRawModeSupported ? (
-          <Console />
-        ) : (
-          <Box borderStyle="single" paddingX={1}>
-            <Text>Raw mode not supported. Console disabled.</Text>
+        <Box
+          borderColor="greenBright"
+          borderStyle="classic"
+          position="relative"
+          marginLeft={-1}
+          paddingX={1}
+        >
+          <Box position="absolute" marginTop={-1} marginLeft={2}>
+            <Text color="greenBright">// COMMAND //</Text>
           </Box>
-        )}
+          {isRawModeSupported ? (
+            <Console />
+          ) : (
+            <Box borderStyle="single" paddingX={1}>
+              <Text>Raw mode not supported. Console disabled.</Text>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Routes>
   );

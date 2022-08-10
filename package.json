@@ -10,7 +10,10 @@
   "private": false,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
+    "@types/ascii-art": "^1.4.0",
     "@types/yargs": "^17.0.10",
+    "ascii-art": "^2.8.5",
+    "fuse.js": "^6.6.2",
     "ink": "^3.2.0",
     "lancer-data": "^3.0.45",
     "math-expression-evaluator": "^1.4.0",
@@ -23,7 +26,8 @@
   },
   "scripts": {
     "dev": "ts-node src/index.ts",
-    "dev:nodemon": "nodemon --config nodemon.json src/index.ts"
+    "dev:nodemon": "nodemon --config nodemon.json src/index.ts",
+    "copy-fonts": "cp ./node_modules/ascii-art/Fonts/*.flf ./node_modules/ascii-art-font/Fonts/"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
