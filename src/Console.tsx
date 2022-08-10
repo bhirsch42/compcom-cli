@@ -1,16 +1,27 @@
 import React from "react";
 import { Box, DOMElement, Key, Text, useInput, useStdin } from "ink";
-import { useRunCommand } from "./hooks/useRunCommand";
+import { useRunCommand } from "./hooks/useCliCommand";
 import { useStore } from "./hooks/useStore";
 import { reverse, slice } from "ramda";
 import { Log, LogType } from "./store/console";
+import TypeyText from "./TypeyText";
 
-type LogRenderer = (log: Log, key: string | number) => React.ReactNode;
+type LogRenderer = (log: Log) => React.ReactNode;
 
 const LogRenderers: Record<LogType, LogRenderer> = {
-  [LogType.COMMAND]: (log, key) => (
-    <Text key={key}>
+  [LogType.COMMAND]: (log) => (
+    <Text key={log.id}>
       {"> "}
+      {log.message}
+    </Text>
+  ),
+  [LogType.INFO]: (log) => (
+    <TypeyText key={log.id} dimColor>
+      {log.message}
+    </TypeyText>
+  ),
+  [LogType.ERROR]: (log) => (
+    <Text key={log.id} color={"red"}>
       {log.message}
     </Text>
   ),
@@ -18,10 +29,10 @@ const LogRenderers: Record<LogType, LogRenderer> = {
 
 const Console: React.FC = () => {
   const { state } = useStore();
-  const { runCommand } = useRunCommand();
   const [userText, setUserText] = React.useState("");
+  const { runCommand } = useRunCommand(userText);
   const containerEl = React.useRef<DOMElement>(null);
-  const maxLineCount = containerEl.current?.yogaNode?.getHeight().value || 5;
+  const maxLineCount = containerEl.current?.yogaNode?.getComputedHeight() || 5;
 
   const { setRawMode } = useStdin();
 
@@ -37,7 +48,7 @@ const Console: React.FC = () => {
       setUserText(userText.slice(0, userText.length - 1));
     } else if (key.return) {
       if (userText.length > 0) {
-        runCommand(userText);
+        runCommand();
         setUserText("");
       }
     } else {
@@ -47,7 +58,7 @@ const Console: React.FC = () => {
 
   const logs = reverse(
     slice(
-      Math.max(state.console.logs.length - maxLineCount, 0),
+      Math.max(state.console.logs.length - maxLineCount - 2, 0),
       state.console.logs.length,
       state.console.logs
     )
@@ -64,12 +75,12 @@ const Console: React.FC = () => {
       ref={containerEl}
     >
       <Box flexDirection="column-reverse">
-        <Text color={"green"}>
+        <Text>
           {"> "}
           {userText}
           {"‸"}
         </Text>
-        {logs.map((log, i) => LogRenderers[log.type](log, i))}
+        {logs.map((log) => LogRenderers[log.type](log))}
       </Box>
     </Box>
   );

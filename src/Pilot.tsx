@@ -7,6 +7,7 @@ import PilotGear from "./PilotGear";
 import Section from "./Section";
 import Table from "./Table";
 import License from "./License";
+import TypeyText from "./TypeyText";
 
 const { rules } = lancerData;
 
@@ -59,7 +60,7 @@ const Pilot: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
       <Section title={"Mechs"}>
         <Box flexDirection="column" paddingLeft={1}>
           {pilot.mechs.map((mech) => (
-            <Text key={mech.id}>{mech.name}</Text>
+            <TypeyText key={mech.id}>{mech.name}</TypeyText>
           ))}
         </Box>
       </Section>

@@ -1,6 +1,7 @@
 import { Box, Text } from "ink";
 import { transpose } from "ramda";
 import React from "react";
+import TypeyText from "./TypeyText";
 
 const Table: React.FC<{ rows: (JSX.Element | string | number)[][] }> = ({
   rows,
@@ -18,7 +19,7 @@ const Table: React.FC<{ rows: (JSX.Element | string | number)[][] }> = ({
             key={i}
           >
             {column.map((cell, j) => (
-              <Text key={j}>{cell}</Text>
+              <TypeyText key={j}>{cell}</TypeyText>
             ))}
           </Box>
         );

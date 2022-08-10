@@ -4,21 +4,21 @@ import Pilot from "./Pilot";
 import { Route, Routes } from "./Router";
 import Compendium from "./Compendium";
 import Console from "./Console";
-import { useRunCommand } from "./hooks/useRunCommand";
+import { useRunCommand } from "./hooks/useCliCommand";
 import { hideBin } from "yargs/helpers";
 import { CompconDataProvider, useCompconData } from "./hooks/useCompconData";
 import { StoreProvider, useStore } from "./hooks/useStore";
 
 const App: React.FC = () => {
-  const { runCommand } = useRunCommand();
+  const { runCommand } = useRunCommand(hideBin(process.argv));
   const { isRawModeSupported } = useStdin();
   const compconData = useCompconData();
 
   const { store, state } = useStore();
 
-  useEffect(() => {
-    runCommand(hideBin(process.argv));
-  }, []);
+  // useEffect(() => {
+  //   runCommand();
+  // }, []);
 
   return (
     <Routes initRoute={[{ name: "pilots" }]}>

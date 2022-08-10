@@ -1,16 +1,24 @@
 import reduxToolkit, { PayloadAction } from "@reduxjs/toolkit";
-import { Text } from "ink";
-import React from "react";
 const { createSlice } = reduxToolkit;
 
 export enum LogType {
   COMMAND = "command",
+  ERROR = "error",
+  INFO = "info",
 }
 
 export type Log = {
   type: LogType;
   message: string;
+  id: number;
 };
+
+export type LogInput = Omit<Log, "id">;
+
+let _id = 0;
+function getId() {
+  return _id++;
+}
 
 export const consoleSlice = createSlice({
   name: "console",
@@ -25,9 +33,13 @@ export const consoleSlice = createSlice({
       state.logs.push({
         type: LogType.COMMAND,
         message: action.payload,
+        id: getId(),
       });
+    },
+    logged: (state, action: PayloadAction<LogInput>) => {
+      state.logs.push({ ...action.payload, id: getId() });
     },
   },
 });
 
-export const { ranCommand } = consoleSlice.actions;
+export const { ranCommand, logged } = consoleSlice.actions;

@@ -3,6 +3,7 @@ import React from "react";
 import lancerData from "lancer-data";
 import { find, propEq } from "ramda";
 import { PilotGear } from "./types/PilotGear";
+import TypeyText from "./TypeyText";
 
 const { pilot_gear } = lancerData;
 
@@ -33,22 +34,22 @@ const PilotGear: React.FC<{ pilotGear: PilotGear | null }> = ({
 
   return (
     <Box paddingX={1} flexDirection="column">
-      <Text>{pilotGearRule.name}</Text>
+      <TypeyText>{pilotGearRule.name}</TypeyText>
       {pilotGearRule.damage && (
-        <Text>
+        <TypeyText>
           {"  "}
           Damage:{" "}
           {pilotGearRule.damage
             .map((damage) => `${damage.type} (${damage.val})`)
             ?.join(", ")}
-        </Text>
+        </TypeyText>
       )}
       {pilotGearRule.range && (
-        <Text>
+        <TypeyText>
           {"  "}
           Range:{" "}
           {pilotGearRule.range.map((range) => `${range.val}`)?.join(", ")}
-        </Text>
+        </TypeyText>
       )}
     </Box>
   );

@@ -1,8 +1,9 @@
-import { Box, Text } from "ink";
+import { Box } from "ink";
 import React from "react";
 import { PilotSkill } from "./types/Skill";
 import lancerData from "lancer-data";
 import { find, propEq } from "ramda";
+import TypeyText from "./TypeyText";
 
 const { skills } = lancerData;
 
@@ -40,16 +41,16 @@ const Skill: React.FC<{ skill: PilotSkill }> = ({ skill }) => {
 
   return (
     <Box paddingX={1} flexDirection="column">
-      <Text>
+      <TypeyText>
         (+{skill.rank * 2}) {skillInfo.name}
-      </Text>
+      </TypeyText>
       {skillInfo.description ? (
-        <Text dimColor>
+        <TypeyText dimColor>
           {"  "}
           {skillInfo.description}
-        </Text>
+        </TypeyText>
       ) : null}
-      {/* <Text>{skillInfo.detail}</Text> */}
+      {/* <TypeyText>{skillInfo.detail}</TypeyText> */}
     </Box>
   );
 };
