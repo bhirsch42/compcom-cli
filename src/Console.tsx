@@ -86,7 +86,7 @@ const Console: React.FC = () => {
 
   const logs = reverse(
     slice(
-      Math.max(state.console.logs.length - maxLineCount + 4, 0),
+      Math.max(state.console.logs.length - maxLineCount + 2, 0),
       state.console.logs.length,
       state.console.logs
     )

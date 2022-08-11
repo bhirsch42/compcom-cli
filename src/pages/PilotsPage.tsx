@@ -9,8 +9,21 @@ const PilotsPage: React.FC = () => {
 
   return (
     <Box alignItems="flex-start" flexGrow={1} flexDirection="column">
-      <Box justifyContent="center" width="100%">
-        <Header text=">>> PILOTS <<<" color="magenta" key="pilot-header" />
+      <Box
+        alignSelf="flex-end"
+        marginBottom={2}
+        width="100%"
+        height="100%"
+        position="absolute"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Header
+          text="P I  L O T S"
+          dimColor
+          color="blackBright"
+          font="colossal"
+        />
       </Box>
 
       <Box>

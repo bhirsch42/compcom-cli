@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import yargs, { Argv } from "yargs";
+import yargs from "yargs";
 import { useGoTo } from "../Router";
 import { logged, LogType, ranCommand } from "../store/console";
 import { useStore } from "./useStore";
-import Fuse from "fuse.js";
 import { isEmpty } from "ramda";
 
 type Command = string | string[];
@@ -19,7 +18,8 @@ function buildArgv(tokens: string[]) {
       default: "fixtures/profile.compcon",
     })
     .command("compendium", "Open the compendium", {})
-    .command("pilots", "Open the pilot roster", {});
+    .command("pilots", "Open the pilot roster", {})
+    .help(false);
 }
 
 function tokenizeCommand(command: Command): string[] {

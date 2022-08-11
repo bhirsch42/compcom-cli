@@ -9,6 +9,7 @@ interface HeaderProps {
   text: string;
   font?: HeaderFont;
   color?: Parameters<typeof TypeyText>[0]["color"];
+  dimColor?: Parameters<typeof TypeyText>[0]["dimColor"];
 }
 
 // Mostly necessary because art promise won't resolve unless
@@ -20,7 +21,12 @@ function buildKey(text: string, font: string) {
   return `${text}-${font}`;
 }
 
-const Header: React.FC<HeaderProps> = ({ text, font = "big", color }) => {
+const Header: React.FC<HeaderProps> = ({
+  text,
+  font = "big",
+  color,
+  dimColor,
+}) => {
   const key = buildKey(text, font);
 
   const [header, setHeader] = React.useState<string | null>(
@@ -40,7 +46,9 @@ const Header: React.FC<HeaderProps> = ({ text, font = "big", color }) => {
 
   return header ? (
     <Box>
-      <TypeyText color={color}>{header}</TypeyText>
+      <TypeyText color={color} dimColor={dimColor}>
+        {header}
+      </TypeyText>
     </Box>
   ) : null;
 };
