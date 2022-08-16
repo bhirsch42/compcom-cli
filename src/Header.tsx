@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import TypeyText from "./TypeyText";
 import art from "ascii-art";
 import { Box, Text } from "ink";
+import useIsMounted from "./hooks/useIsMounted";
 
 type HeaderFont = "big" | "colossal" | "basic" | "o8";
 
@@ -27,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({
   color,
   dimColor,
 }) => {
+  const isMounted = useIsMounted();
   const key = buildKey(text, font);
 
   const [header, setHeader] = React.useState<string | null>(
@@ -40,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({
       .then((art) => {
         const sanitizedArt = art.trimEnd();
         ART_CACHE.set(key, sanitizedArt);
-        return setHeader(sanitizedArt);
+        isMounted() && setHeader(sanitizedArt);
       });
   }
 

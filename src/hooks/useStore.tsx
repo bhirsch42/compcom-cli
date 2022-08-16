@@ -1,9 +1,8 @@
 import React, { PropsWithChildren, useEffect } from "react";
 import { createStore } from "../store";
-import { decremented, incremented } from "../store/counter";
 
 type Store = ReturnType<typeof createStore>;
-type StoreState = ReturnType<Store["getState"]>;
+export type StoreState = ReturnType<Store["getState"]>;
 
 const store = createStore();
 

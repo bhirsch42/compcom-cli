@@ -1,27 +1,27 @@
 import React from "react";
-import { Box, DOMElement, Key, Text, useInput, useStdin } from "ink";
+import { Box, DOMElement, Text, useInput, useStdin } from "ink";
 import { useRunCommand } from "./hooks/useCliCommand";
-import { useStore } from "./hooks/useStore";
-import { reverse, slice } from "ramda";
+import { slice } from "ramda";
 import { Log, LogType } from "./store/console";
 import TypeyText from "./TypeyText";
+import useSelector from "./hooks/useSelector";
 
 type LogRenderer = (log: Log) => React.ReactNode;
 
 const LogRenderers: Record<LogType, LogRenderer> = {
   [LogType.COMMAND]: (log) => (
-    <Text key={log.id}>
+    <Text key={log.id} wrap="truncate">
       {"> "}
       {log.message}
     </Text>
   ),
   [LogType.INFO]: (log) => (
-    <TypeyText key={log.id} dimColor>
+    <TypeyText key={log.id} dimColor wrap="truncate">
       {log.message}
     </TypeyText>
   ),
   [LogType.ERROR]: (log) => (
-    <Text key={log.id} color={"red"}>
+    <Text key={log.id} color={"red"} wrap="truncate">
       {log.message}
     </Text>
   ),
@@ -79,31 +79,42 @@ const ConsoleInput: React.FC = () => {
   );
 };
 
-const Console: React.FC = () => {
-  const { state } = useStore();
+const LogHistory: React.FC = () => {
+  const consoleLogs = useSelector((state) => state.console.logs);
   const containerEl = React.useRef<DOMElement>(null);
   const maxLineCount = containerEl.current?.yogaNode?.getComputedHeight() || 5;
 
-  const logs = reverse(
-    slice(
-      Math.max(state.console.logs.length - maxLineCount + 2, 0),
-      state.console.logs.length,
-      state.console.logs
-    )
+  const logs = slice(
+    Math.max(consoleLogs.length - maxLineCount, 0),
+    consoleLogs.length,
+    consoleLogs
   );
 
+  return (
+    <Box
+      ref={containerEl}
+      flexDirection="column"
+      justifyContent="flex-end"
+      flexGrow={1}
+    >
+      {logs.map((log) => {
+        return LogRenderers[log.type](log);
+      })}
+    </Box>
+  );
+};
+
+const Console: React.FC = () => {
   return (
     <Box
       paddingX={1}
       width={48}
       flexDirection="column"
       justifyContent="flex-end"
-      ref={containerEl}
+      flexGrow={1}
     >
-      <Box flexDirection="column-reverse">
-        <ConsoleInput />
-        {logs.map((log) => LogRenderers[log.type](log))}
-      </Box>
+      <LogHistory />
+      <ConsoleInput />
     </Box>
   );
 };

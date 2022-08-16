@@ -27,7 +27,9 @@
   "scripts": {
     "dev": "ts-node src/index.ts",
     "dev:nodemon": "nodemon --config nodemon.json src/index.ts",
-    "copy-fonts": "cp ./node_modules/ascii-art/Fonts/*.flf ./node_modules/ascii-art-font/Fonts/"
+    "copy-fonts": "cp ./node_modules/ascii-art/Fonts/*.flf ./node_modules/ascii-art-font/Fonts/",
+    "install-fonts": "sh ./scripts/install-fonts.sh",
+    "init-fonts": "yarn install-fonts; yarn copy-fonts"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
