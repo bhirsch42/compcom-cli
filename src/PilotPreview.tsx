@@ -35,13 +35,7 @@ const PilotPreview: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
 
   return (
     <Box paddingX={1} borderStyle={"classic"}>
-      <Box
-        borderStyle="classic"
-        marginLeft={-2}
-        marginY={-1}
-        paddingX={1}
-        alignItems={"center"}
-      >
+      <Box borderStyle="classic" marginLeft={-2} marginY={-1} paddingX={1}>
         <Text>1</Text>
       </Box>
       <Box paddingX={1}>

@@ -1,15 +1,47 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { Box, render, Text, useStdin } from "ink";
-import { Route, Routes } from "./Router";
+import { Route, Routes, useGoTo } from "./Router";
 import Compendium from "./Compendium";
 import Console from "./Console";
-import { CompconDataProvider, useCompconData } from "./hooks/useCompconData";
+import { CompconDataProvider } from "./hooks/useCompconData";
 import { StoreProvider } from "./hooks/useStore";
-import PilotPreview from "./PilotPreview";
 import PilotsPage from "./pages/PilotsPage";
+import useCommandManager, {
+  CommandBuilder,
+  CommandHandler,
+  CommandManagerProvider,
+} from "./hooks/useCommandManager";
+import { reverse } from "ramda";
+import { useLogger } from "./hooks/useLogger";
+import useRegisterCommands from "./hooks/useRegisterCommands";
+
+const commandBuilder: CommandBuilder = (argv) => {
+  return argv
+    .command("compendium", "Open the compendium", {})
+    .command("pilots", "Open the pilot roster", {});
+};
 
 const App: React.FC = () => {
   const { isRawModeSupported } = useStdin();
+  const goTo = useGoTo();
+  const logger = useLogger();
+
+  const commandHandler: CommandHandler = (token: string) => {
+    switch (token) {
+      case "compendium":
+        goTo([{ name: "compendium" }]);
+        logger.info("Opening compendium.");
+        return true;
+      case "pilots":
+        goTo([{ name: "pilots" }]);
+        logger.info("Opening pilot roster.");
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  useRegisterCommands({ commandHandler, commandBuilder });
 
   return (
     <Routes initRoute={[{ name: "pilots" }]}>
@@ -55,12 +87,25 @@ const App: React.FC = () => {
   );
 };
 
+const TOP_LEVEL_CONTEXTS = [
+  CompconDataProvider,
+  StoreProvider,
+  CommandManagerProvider,
+];
+
+const TopLevelContexts: React.FC<PropsWithChildren> = ({ children }) => {
+  const nestedContexts = reverse(TOP_LEVEL_CONTEXTS).reduce(
+    (agg, Context) => <Context>{agg}</Context>,
+    children
+  );
+
+  return <>{nestedContexts}</>;
+};
+
 export default async function runApp() {
   render(
-    <CompconDataProvider>
-      <StoreProvider>
-        <App />
-      </StoreProvider>
-    </CompconDataProvider>
+    <TopLevelContexts>
+      <App />
+    </TopLevelContexts>
   );
 }

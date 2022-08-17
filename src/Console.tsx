@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, DOMElement, Text, useInput, useStdin } from "ink";
-import { useRunCommand } from "./hooks/useCliCommand";
+import { useRunCommand } from "./hooks/useRunCommand";
 import { slice } from "ramda";
 import { Log, LogType } from "./store/console";
 import TypeyText from "./TypeyText";
