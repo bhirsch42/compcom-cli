@@ -65,7 +65,12 @@ declare module "lancer-data" {
   };
 
   export type Bonus = {
-    id: string;
+    id:
+      | "pilot_hp"
+      | "pilot_evasion"
+      | "pilot_edef"
+      | "pilot_speed"
+      | "pilot_armor";
     val: number;
     replace?: boolean;
   };

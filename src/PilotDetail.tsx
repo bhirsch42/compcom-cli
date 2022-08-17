@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "ink";
+import { Box, Text } from "ink";
 import lancerData from "lancer-data";
 import Skill from "./Skill";
 import PilotGear from "./PilotGear";
@@ -14,15 +14,32 @@ const PilotDetail: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
     ["Name:", pilot.name],
     ["Callsign:", pilot.callsign],
     ["Level:", pilot.level],
-    ["HP:", `${pilot.current_hp}/${pilot.maxHp}`],
     ["Grit:", `+${pilot.grit}`],
-    ["E-Defense:", pilot.eDefense],
-    ["Speed:", pilot.speed],
   ];
 
   return (
     <Box flexDirection="column">
       <Table rows={pilotInfoRows} />
+
+      <Box>
+        <Section title={" HP "} marginRight={2}>
+          <Text>
+            {pilot.current_hp}/{pilot.maxHp}
+          </Text>
+        </Section>
+        <Section title={"Armor"} marginRight={2}>
+          <Text>{pilot.armor}</Text>
+        </Section>
+        <Section title={"E-Defense"} marginRight={2}>
+          <Text>{pilot.eDefense}</Text>
+        </Section>
+        <Section title={"Evasion"} marginRight={2}>
+          <Text>{pilot.evasion}</Text>
+        </Section>
+        <Section title={"Speed"} marginRight={2}>
+          <Text>{pilot.speed}</Text>
+        </Section>
+      </Box>
 
       <Section title={"Skills"}>
         {pilot.skills.map((skill) => (

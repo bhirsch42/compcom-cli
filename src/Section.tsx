@@ -1,14 +1,14 @@
 import React from "react";
-import { Text, Box, Newline } from "ink";
+import { Text, Box, Newline, BoxProps } from "ink";
 import TypeyText from "./TypeyText";
 
 const Section: React.FC<
-  React.PropsWithChildren<{ title?: JSX.Element | string }>
-> = ({ title, children }) => {
+  React.PropsWithChildren<{ title?: JSX.Element | string } & BoxProps>
+> = ({ title, children, ...boxProps }) => {
   return (
-    <Box flexDirection="column" paddingTop={1}>
+    <Box flexDirection="column" paddingTop={1} {...boxProps}>
       {title && (
-        <TypeyText backgroundColor={"blue"} color={"white"}>
+        <TypeyText backgroundColor={"blackBright"} color={"white"} bold>
           {" "}
           {title}{" "}
         </TypeyText>
