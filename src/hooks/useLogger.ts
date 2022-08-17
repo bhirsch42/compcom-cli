@@ -1,7 +1,13 @@
-import { logged, LogType, ranCommand } from "../store/console";
+import { logged, LogType, ranCommand } from "../store/slices/console";
 import { useStore } from "./useStore";
 
-export function useLogger() {
+export type UseLoggerReturns = {
+  command(message: string): void;
+  info(message: string): void;
+  error(message: string): void;
+};
+
+export function useLogger(): UseLoggerReturns {
   const { store } = useStore();
 
   return {

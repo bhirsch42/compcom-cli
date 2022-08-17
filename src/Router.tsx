@@ -29,11 +29,13 @@ type PageName = Page["name"];
 type RouterContextProps = {
   currentPath: Page[];
   setCurrentPath: (path: Page[]) => void;
+  currentPage: Page | null;
 };
 
 const RouterContext = React.createContext<RouterContextProps>({
   currentPath: [],
   setCurrentPath: noop,
+  currentPage: null,
 });
 
 export const Routes: React.FC<PropsWithChildren<{ initRoute: Page[] }>> = ({
@@ -45,6 +47,7 @@ export const Routes: React.FC<PropsWithChildren<{ initRoute: Page[] }>> = ({
   const context = {
     currentPath,
     setCurrentPath,
+    currentPage: null,
   };
 
   return (
@@ -60,15 +63,17 @@ export const Route: React.FC<PropsWithChildren<{ path: PageName }>> = ({
   const [[page], pages] = splitAt(1, context.currentPath);
 
   return page.name === path ? (
-    <RouterContext.Provider value={{ ...context, currentPath: pages }}>
+    <RouterContext.Provider
+      value={{ ...context, currentPath: pages, currentPage: page }}
+    >
       {children}
     </RouterContext.Provider>
   ) : null;
 };
 
 export function useRouter() {
-  const { setCurrentPath, currentPath } = React.useContext(RouterContext);
-  const currentPage = last(currentPath);
+  const { setCurrentPath, currentPath, currentPage } =
+    React.useContext(RouterContext);
 
   return {
     currentPage,

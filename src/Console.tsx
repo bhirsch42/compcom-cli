@@ -2,7 +2,7 @@ import React from "react";
 import { Box, DOMElement, Text, useInput, useStdin } from "ink";
 import { useRunCommand } from "./hooks/useRunCommand";
 import { slice } from "ramda";
-import { Log, LogType } from "./store/console";
+import { Log, LogType } from "./store/slices/console";
 import TypeyText from "./TypeyText";
 import useSelector from "./hooks/useSelector";
 
@@ -108,10 +108,10 @@ const Console: React.FC = () => {
   return (
     <Box
       paddingX={1}
-      width={48}
+      width={60}
+      minWidth={60}
       flexDirection="column"
       justifyContent="flex-end"
-      flexGrow={1}
     >
       <LogHistory />
       <ConsoleInput />

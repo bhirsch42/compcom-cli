@@ -15,9 +15,8 @@ const commandBuilder: CommandBuilder = (argv) => {
 
 const HUDInner: React.FC = () => {
   const { goTo } = useRouter();
-  const logger = useLogger();
 
-  const commandHandler: CommandHandler = (token: string) => {
+  const commandHandler: CommandHandler = (token: string, { logger }) => {
     switch (token) {
       case "compendium":
         goTo([{ name: "compendium" }]);

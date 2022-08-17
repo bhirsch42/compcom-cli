@@ -1,6 +1,7 @@
 import reduxToolkit from "@reduxjs/toolkit";
-import { counterSlice } from "./counter";
-import { consoleSlice } from "./console";
+import { counterSlice } from "./slices/counter";
+import { consoleSlice } from "./slices/console";
+import { pilotsSlice } from "./slices/pilots";
 
 const { configureStore, combineReducers } = reduxToolkit;
 
@@ -9,6 +10,7 @@ export function createStore() {
     reducer: combineReducers({
       counter: counterSlice.reducer,
       console: consoleSlice.reducer,
+      pilots: pilotsSlice.reducer,
     }),
   });
 }

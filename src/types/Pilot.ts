@@ -30,7 +30,7 @@ export type License = {
   rank: number;
 };
 
-export type Pilot = {
+export type ImportedPilot = {
   minorIdeal: string;
   bondAnswers: string[];
   maxStress: number;
@@ -115,6 +115,6 @@ export type Pilot = {
   loadout: PilotLoadout;
 };
 
-export function parsePilots(pilotData: string): Pilot[] {
-  return JSON.parse(pilotData) as Pilot[];
+export function parsePilots(pilotData: string): ImportedPilot[] {
+  return JSON.parse(pilotData) as ImportedPilot[];
 }

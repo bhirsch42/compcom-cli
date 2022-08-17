@@ -2,14 +2,18 @@ import React from "react";
 import { Text } from "ink";
 import { useRouter } from "../Router";
 import useSelector from "../hooks/useSelector";
-import { StoreState } from "../hooks/useStore";
+import { selectPilot } from "../store/selectors/selectPilot";
+import PilotDetail from "../PilotDetail";
 
-const selectPilot = (pilotId: string) => (state: StoreState) => {};
+const ERROR_MESSAGE = <Text>Could not find pilot.</Text>;
 
 const PilotDetailsPage: React.FC = () => {
   const { currentPage } = useRouter();
-  const pilot = useSelector(selectPilot);
-  return <Text>Pilot details</Text>;
+  const pilotId = currentPage?.name === "pilot-details" && currentPage.pilotId;
+  if (!pilotId) return ERROR_MESSAGE;
+  const pilot = useSelector(selectPilot(pilotId));
+  if (!pilot) return ERROR_MESSAGE;
+  return <PilotDetail pilot={pilot} />;
 };
 
 export default PilotDetailsPage;

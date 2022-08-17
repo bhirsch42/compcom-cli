@@ -8,23 +8,27 @@ import { CommandHandler } from "../hooks/useCommandManager";
 import { useLogger } from "../hooks/useLogger";
 import { find } from "ramda";
 import { useRouter } from "../Router";
+import { useDelayedLogger } from "../hooks/useDelayedLogger";
 
 const PilotRosterPage: React.FC = () => {
   const compconData = useCompconData();
-  const logger = useLogger();
+  const logger = useDelayedLogger();
   const { goTo } = useRouter();
 
   const pilotCallsigns = compconData.pilots.map((pilot) => pilot.callsign);
   const pilotNames = compconData.pilots.map((pilot) => pilot.name);
   const customCompletions = [...pilotCallsigns, ...pilotNames];
 
-  const commandHandler: CommandHandler = (token: string) => {
+  const commandHandler: CommandHandler = (token: string, { logger }) => {
     const matchingPilot = find(
       (pilot) => pilot.name === token || pilot.callsign === token,
       compconData.pilots
     );
 
     if (matchingPilot) {
+      logger.info(
+        `Loading [CALLSIGN // ${matchingPilot.callsign.toUpperCase()}]`
+      );
       goTo([{ name: "pilot-details", pilotId: matchingPilot.id }]);
       return true;
     }

@@ -1,9 +1,13 @@
 import React, { PropsWithChildren } from "react";
 import { Argv } from "yargs";
 import { always as noop } from "ramda";
+import { UseLoggerReturns } from "./useLogger";
 
 export type CommandBuilder = (argv: Argv) => Argv;
-export type CommandHandler = (tokens: string) => boolean;
+export type CommandHandler = (
+  tokens: string,
+  ctx: { logger: UseLoggerReturns }
+) => boolean;
 export type CommandHandlerGroup = {
   commandBuilder?: CommandBuilder;
   commandHandler: CommandHandler;

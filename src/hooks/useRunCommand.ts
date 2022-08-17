@@ -3,6 +3,7 @@ import yargs from "yargs";
 import { any, flatten, isEmpty, isNil, reject } from "ramda";
 import { useLogger } from "./useLogger";
 import useCommandManager, { CommandHandlerGroup } from "./useCommandManager";
+import { useDelayedLogger } from "./useDelayedLogger";
 
 type Command = string | string[];
 
@@ -45,6 +46,7 @@ function getTopCompletion(tokens: string[], completions: string[]) {
 
 export function useRunCommand(command: Command) {
   const logger = useLogger();
+  const delayedLogger = useDelayedLogger();
   const { commandHandlerGroups } = useCommandManager();
   const [completion, setCompletion] = React.useState<Completion | null>(null);
   const commandHandlers = commandHandlerGroups.map(
@@ -79,14 +81,15 @@ export function useRunCommand(command: Command) {
 
   function handleCommand(tokenString: string) {
     const isSuccess = any(
-      (commandHandler) => commandHandler(tokenString),
+      (commandHandler) =>
+        commandHandler(tokenString, { logger: delayedLogger }),
       commandHandlers
     );
 
     if (isSuccess) {
-      logger.command(commandString);
+      logger.command(tokenString);
     } else {
-      logger.error(`Invalid command: ${commandString}`);
+      logger.error(`Invalid command: ${tokenString}`);
     }
   }
 
