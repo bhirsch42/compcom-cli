@@ -3,8 +3,7 @@ import { without } from "ramda";
 import React, { DependencyList } from "react";
 
 export default function useRegisterCommands(
-  commandHandlerGroup: CommandHandlerGroup,
-  deps?: DependencyList
+  commandHandlerGroup: CommandHandlerGroup
 ) {
   const { commandHandlerGroups, setCommandHandlerGroups } = useCommandManager();
 
@@ -16,5 +15,5 @@ export default function useRegisterCommands(
         without([commandHandlerGroup], commandHandlerGroups)
       );
     };
-  }, deps);
+  }, []);
 }
