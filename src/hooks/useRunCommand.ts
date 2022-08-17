@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import yargs from "yargs";
-import { any, isEmpty, isNil, reject } from "ramda";
+import { any, flatten, isEmpty, isNil, reject } from "ramda";
 import { useLogger } from "./useLogger";
 import useCommandManager, { CommandHandlerGroup } from "./useCommandManager";
 
@@ -38,7 +38,9 @@ function getTopCompletion(tokens: string[], completions: string[]) {
     : (completions || [])
         .map((completion) => completion.split(":"))
         .map(([value, helpText]) => ({ value, helpText }))
-        .find(({ value }) => value.startsWith(tokens.join(" ")));
+        .find(({ value }) =>
+          value.toLowerCase().startsWith(tokens.join(" ").toLowerCase())
+        );
 }
 
 export function useRunCommand(command: Command) {
@@ -47,6 +49,13 @@ export function useRunCommand(command: Command) {
   const [completion, setCompletion] = React.useState<Completion | null>(null);
   const commandHandlers = commandHandlerGroups.map(
     ({ commandHandler }) => commandHandler
+  );
+
+  const customCompletions = reject(
+    isNil,
+    flatten(
+      commandHandlerGroups.map(({ customCompletions }) => customCompletions)
+    )
   );
 
   const tokens = tokenizeCommand(command);
@@ -59,7 +68,8 @@ export function useRunCommand(command: Command) {
       // yargs types and docs are wrong
       const [_err, completions] = args as unknown as [Error | null, string[]];
 
-      const topCompletion = getTopCompletion(tokens, completions);
+      const allCompletions = [...customCompletions, ...completions];
+      const topCompletion = getTopCompletion(tokens, allCompletions);
 
       if (topCompletion?.value !== completion?.value) {
         setCompletion(topCompletion || null);

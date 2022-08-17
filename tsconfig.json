@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "include": ["src", "typings/terminal-kit/index.d.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "jsx": "react",

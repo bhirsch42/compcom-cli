@@ -6,12 +6,13 @@ import { CompconDataProvider } from "./hooks/useCompconData";
 import { StoreProvider } from "./hooks/useStore";
 import { CommandManagerProvider } from "./hooks/useCommandManager";
 import { reverse } from "ramda";
+import HUDInner from "./HUDInner";
 
 const App: React.FC = () => {
   const { isRawModeSupported } = useStdin();
 
   return (
-    <Routes initRoute={[{ name: "pilots" }]}>
+    <Routes initRoute={[{ name: "pilot-roster" }]}>
       <Box height={process.stdout.rows - 2}>
         <Box
           flexGrow={1}

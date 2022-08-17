@@ -1,6 +1,6 @@
 import useCommandManager, { CommandHandlerGroup } from "./useCommandManager";
 import { without } from "ramda";
-import React, { DependencyList } from "react";
+import React from "react";
 
 export default function useRegisterCommands(
   commandHandlerGroup: CommandHandlerGroup
@@ -8,12 +8,12 @@ export default function useRegisterCommands(
   const { commandHandlerGroups, setCommandHandlerGroups } = useCommandManager();
 
   React.useEffect(() => {
-    setCommandHandlerGroups([commandHandlerGroup, ...commandHandlerGroups]);
+    setCommandHandlerGroups((state) => [commandHandlerGroup, ...state]);
 
     return () => {
-      setCommandHandlerGroups(
-        without([commandHandlerGroup], commandHandlerGroups)
-      );
+      setCommandHandlerGroups((state) => {
+        return without([commandHandlerGroup], state);
+      });
     };
   }, []);
 }

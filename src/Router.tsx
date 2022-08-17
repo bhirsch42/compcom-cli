@@ -1,4 +1,4 @@
-import { always as noop, splitAt } from "ramda";
+import { always as noop, last, splitAt } from "ramda";
 import React, { PropsWithChildren } from "react";
 
 type HomePage = {
@@ -9,11 +9,20 @@ type CompendiumPage = {
   name: "compendium";
 };
 
-type PilotsPage = {
-  name: "pilots";
+type PilotRosterPage = {
+  name: "pilot-roster";
 };
 
-export type Page = HomePage | CompendiumPage | PilotsPage;
+type PilotDetailsPage = {
+  name: "pilot-details";
+  pilotId: string;
+};
+
+export type Page =
+  | HomePage
+  | CompendiumPage
+  | PilotRosterPage
+  | PilotDetailsPage;
 
 type PageName = Page["name"];
 
@@ -57,7 +66,13 @@ export const Route: React.FC<PropsWithChildren<{ path: PageName }>> = ({
   ) : null;
 };
 
-export function useGoTo() {
-  const { setCurrentPath } = React.useContext(RouterContext);
-  return setCurrentPath;
+export function useRouter() {
+  const { setCurrentPath, currentPath } = React.useContext(RouterContext);
+  const currentPage = last(currentPath);
+
+  return {
+    currentPage,
+    currentPath,
+    goTo: setCurrentPath,
+  };
 }

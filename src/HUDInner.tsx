@@ -1,10 +1,11 @@
 import React from "react";
-import { Route, useGoTo } from "./Router";
+import { Route, useRouter } from "./Router";
 import Compendium from "./Compendium";
-import PilotsPage from "./pages/PilotsPage";
+import PilotRosterPage from "./pages/PilotRosterPage";
 import { CommandBuilder, CommandHandler } from "./hooks/useCommandManager";
 import { useLogger } from "./hooks/useLogger";
 import useRegisterCommands from "./hooks/useRegisterCommands";
+import PilotDetailsPage from "./pages/PilotDetailsPage";
 
 const commandBuilder: CommandBuilder = (argv) => {
   return argv
@@ -13,7 +14,7 @@ const commandBuilder: CommandBuilder = (argv) => {
 };
 
 const HUDInner: React.FC = () => {
-  const goTo = useGoTo();
+  const { goTo } = useRouter();
   const logger = useLogger();
 
   const commandHandler: CommandHandler = (token: string) => {
@@ -23,7 +24,7 @@ const HUDInner: React.FC = () => {
         logger.info("Opening compendium.");
         return true;
       case "pilots":
-        goTo([{ name: "pilots" }]);
+        goTo([{ name: "pilot-roster" }]);
         logger.info("Opening pilot roster.");
         return true;
       default:
@@ -35,12 +36,17 @@ const HUDInner: React.FC = () => {
 
   return (
     <>
-      <Route path="pilots">
-        <PilotsPage />
+      <Route path="pilot-roster">
+        <PilotRosterPage />
       </Route>
       <Route path="compendium">
         <Compendium />
       </Route>
+      <Route path="pilot-details">
+        <PilotDetailsPage />
+      </Route>
     </>
   );
 };
+
+export default HUDInner;

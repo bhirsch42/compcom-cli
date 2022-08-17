@@ -12,9 +12,9 @@ export type CommandHandlerGroup = {
 
 interface CommandManagerContextProps {
   commandHandlerGroups: CommandHandlerGroup[];
-  setCommandHandlerGroups: (
-    commandHandlerGroups: CommandHandlerGroup[]
-  ) => void;
+  setCommandHandlerGroups: React.Dispatch<
+    React.SetStateAction<CommandHandlerGroup[]>
+  >;
 }
 
 const DEFAULT_VALUE: CommandManagerContextProps = {

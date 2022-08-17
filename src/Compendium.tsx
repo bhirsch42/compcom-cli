@@ -4,7 +4,7 @@ import { Box, Text } from "ink";
 const Compendium: React.FC = () => {
   return (
     <Box>
-      <Text>Hello, compendium!</Text>
+      <Text>TODO</Text>
     </Box>
   );
 };
