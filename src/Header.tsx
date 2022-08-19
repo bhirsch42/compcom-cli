@@ -1,58 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TypeyText from "./TypeyText";
-import art from "ascii-art";
-import { Box, Text } from "ink";
-import useIsMounted from "./hooks/useIsMounted";
-
-type HeaderFont = "big" | "colossal" | "basic" | "o8";
+import { Box } from "ink";
+import renderAsciiFont from "./lib/renderAsciiFont";
+import { Fonts } from "figlet";
 
 interface HeaderProps {
   text: string;
-  font?: HeaderFont;
+  font?: Fonts;
   color?: Parameters<typeof TypeyText>[0]["color"];
   dimColor?: Parameters<typeof TypeyText>[0]["dimColor"];
 }
 
-// Mostly necessary because art promise won't resolve unless
-// it's the component instance's first time rendering.
-// Not sure why that's the case.
-const ART_CACHE = new Map<string, string>();
-
-function buildKey(text: string, font: string) {
-  return `${text}-${font}`;
-}
-
 const Header: React.FC<HeaderProps> = ({
   text,
-  font = "big",
+  font = "Big",
   color,
   dimColor,
 }) => {
-  const isMounted = useIsMounted();
-  const key = buildKey(text, font);
-
-  const [header, setHeader] = React.useState<string | null>(
-    ART_CACHE.get(key) || null
-  );
-
-  if (!header) {
-    art
-      .font(text, font)
-      .toPromise()
-      .then((art) => {
-        const sanitizedArt = art.trimEnd();
-        ART_CACHE.set(key, sanitizedArt);
-        isMounted() && setHeader(sanitizedArt);
-      });
-  }
-
-  return header ? (
+  return (
     <Box>
       <TypeyText color={color} dimColor={dimColor}>
-        {header}
+        {renderAsciiFont(text, font)}
       </TypeyText>
     </Box>
-  ) : null;
+  );
 };
 
 export default Header;

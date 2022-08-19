@@ -1,4 +1,27 @@
 declare module "lancer-data" {
+  import {
+    Duration,
+    ActivationType,
+    MountType,
+    FittingSize,
+    WeaponSize,
+    WeaponType,
+    ItemType,
+    SystemType,
+    SkillFamily,
+    RangeType,
+    DamageType,
+    MechType,
+    HASE,
+    ReserveType,
+    OrgType,
+    EncounterSide,
+    ImageTag,
+    DeployableType,
+  } from "./enums";
+
+  export * from "./enums";
+
   export type Rules = {
     base_structure: number;
     base_stress: number;
@@ -64,7 +87,7 @@ declare module "lancer-data" {
     val: number;
   };
 
-  export type Bonus = {
+  export type PilotGearBonus = {
     id:
       | "pilot_hp"
       | "pilot_evasion"
@@ -75,6 +98,11 @@ declare module "lancer-data" {
     replace?: boolean;
   };
 
+  export type MechBonus = {
+    id: string;
+    val?: number;
+  };
+
   export type Deployable = {
     name: string;
     type: string;
@@ -83,16 +111,39 @@ declare module "lancer-data" {
     actions: DeployableAction[];
   };
 
+  export interface SystemDeployable {
+    name: string;
+    type: DeployableType;
+    range?: Range[];
+    detail: string;
+    instances?: number;
+    size?: number;
+    hp?: number;
+    evasion?: number;
+    recall?: ActivationType;
+    redeploy?: ActivationType;
+    activation?: ActivationType;
+    edef?: number;
+    actions?: ActiveAction[];
+    cost?: number;
+    counters?: Counter[];
+    tags?: Tag[];
+    deactivation?: ActivationType;
+  }
+
   export type DeployableAction = {
     name: string;
-    activation: string;
+    activation: Activation;
     detail: string;
     pilot: boolean;
   };
 
   export type Tag = {
     id: string;
-    val?: number;
+    name: string;
+    description: string;
+    filter_ignore?: boolean;
+    hidden?: boolean;
   };
 
   export enum PilotGearType {
@@ -120,31 +171,36 @@ declare module "lancer-data" {
     range?: Range[];
     damage?: Damage[];
     effect?: string;
-    bonuses?: Bonus[];
+    bonuses?: PilotGearBonus[];
     actions?: PilotGearAction[];
     deployables?: Deployable[];
   };
 
-  export enum MechType {
-    Artillery = "Artillery",
-    Balanced = "Balanced",
-    Controller = "Controller",
-    Defender = "Defender",
-    Striker = "Striker",
-    Support = "Support",
-  }
-
-  export enum Mount {
-    AuxAux = "Aux/Aux",
-    Flex = "Flex",
-    Heavy = "Heavy",
-    Main = "Main",
-    MainAux = "Main/Aux",
-  }
+  export type Range = {
+    type: RangeType;
+    val: number;
+  };
 
   export type Art = {
     tag: string;
     src: string;
+  };
+
+  export type ActiveAction = {
+    name: string;
+    activation: ActivationType;
+    frequency?: string; // has some magic values
+    trigger?: string;
+    detail: string;
+    init?: string;
+    tech_attack?: boolean;
+  };
+
+  export type PassiveAction = {
+    name: string;
+    activation: ActivationType;
+    detail: string;
+    pilot?: boolean;
   };
 
   export type Counter = {
@@ -156,7 +212,53 @@ declare module "lancer-data" {
     level?: number;
   };
 
-  export type Frame = {
+  export type CoreSystemDeployable = {
+    name: string;
+    type: DeployableType;
+    detail: string;
+    activation: Activation;
+    recall: Activation;
+    redeploy: Activation;
+    size: number;
+    hp: string;
+  };
+
+  export type CoreSystem = {
+    name: string;
+    active_name: string;
+    active_effect: string;
+    use?: Duration;
+    activation: ActivationType;
+    active_synergies?: ActiveSynergyElement[];
+    description?: string;
+    deactivation?: ActivationType;
+    integrated?: string[];
+    active_actions?: ActiveAction[];
+    passive_name?: string;
+    passive_effect?: string;
+    passive_actions?: PassiveAction[];
+    deployables?: CoreSystemDeployable[];
+    active_bonuses?: MechBonus[];
+  };
+
+  export type FrameStats = {
+    size: number;
+    structure: number;
+    stress: number;
+    armor: number;
+    hp: number;
+    evasion: number;
+    edef: number;
+    heatcap: number;
+    repcap: number;
+    sensor_range: number;
+    tech_attack: number;
+    save: number;
+    speed: number;
+    sp: number;
+  };
+
+  export type FrameRule = {
     id: string;
     license_level: number;
     source: string;
@@ -164,10 +266,10 @@ declare module "lancer-data" {
     mechtype: MechType[];
     y_pos: number;
     description: string;
-    mounts: Mount[];
-    stats: { [key: string]: number };
+    mounts: MountType[];
+    stats: FrameStats;
     traits: Trait[];
-    // core_system: CoreSystem;
+    core_system: CoreSystem;
     image_url: string;
     license_id: string;
     other_art?: Art[];
@@ -185,9 +287,18 @@ declare module "lancer-data" {
     description: string;
   };
 
+  export type Status = {
+    name: string;
+    icon: string;
+    type: "Condition" | "Status";
+    terse: string;
+    exclusive?: "Mech" | "Pilot";
+    effects: string;
+  };
+
   export const rules: Rules;
   export const skills: SkillRule[];
   export const pilot_gear: PilotGearRule[];
-  export const frames: Frame[];
+  export const frames: FrameRule[];
   export const manufacturers: Manufacturer[];
 }

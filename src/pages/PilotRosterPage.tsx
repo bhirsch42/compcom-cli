@@ -57,7 +57,7 @@ const PilotRosterPage: React.FC = () => {
           text="P I  L O T S"
           dimColor
           color="blackBright"
-          font="colossal"
+          font="Colossal"
         />
       </Box>
 

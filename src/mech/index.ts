@@ -1,6 +1,6 @@
 type IMechLoadoutData = never;
 
-export type Mech = {
+export type ImportedMech = {
   deleteTime: string;
   expireTime: string;
   lastModified: string;
@@ -39,6 +39,6 @@ export type Mech = {
   cc_ver: string;
 };
 
-export function parseMech(mechData: string): Mech {
-  return JSON.parse(mechData) as Mech;
+export function parseMech(mechData: string): ImportedMech {
+  return JSON.parse(mechData) as ImportedMech;
 }

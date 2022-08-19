@@ -1,4 +1,4 @@
-import { Mech } from "../mech";
+import { ImportedMech } from "../mech";
 import { PilotGear } from "./PilotGear";
 import { PilotSkill } from "./Skill";
 
@@ -64,7 +64,7 @@ export type ImportedPilot = {
 
   resistances: string[];
   special_equipment: IUnlockData;
-  mechs: Mech[];
+  mechs: ImportedMech[];
   cc_ver: string;
   brews: BrewInfo[];
   state: IActiveStateData;
