@@ -1,0 +1,30 @@
+import { Action } from "../Action";
+import { Bonus } from "../Bonus";
+import { CounterData } from "../Counter";
+import { DeployableData } from "../Deployable";
+import { ActivationType, Duration } from "../enums";
+import { Synergy } from "../Synergy";
+import { Tag } from "../Tag";
+
+export type CoreSystemData = {
+  name: string;
+  description: string;
+  active_name: string;
+  active_effect: string;
+  activation: ActivationType;
+  deactivation?: ActivationType;
+  use?: Duration;
+  active_actions?: Action[];
+  active_bonuses?: Bonus[];
+  active_synergies?: Synergy[];
+  passive_name?: string;
+  passive_effect?: string;
+  passive_actions?: Action[];
+  passive_bonuses?: Bonus[];
+  passive_synergies?: Synergy[];
+  deployables?: DeployableData[];
+  counters?: CounterData[];
+  integrated?: string[];
+  special_equipment?: string[];
+  tags: Tag[];
+};

@@ -22,44 +22,6 @@ declare module "lancer-data" {
 
   export * from "./enums";
 
-  export type Rules = {
-    base_structure: number;
-    base_stress: number;
-    base_grapple: number;
-    base_ram: number;
-    base_pilot_hp: number;
-    base_pilot_evasion: number;
-    base_pilot_edef: number;
-    base_pilot_speed: number;
-    minimum_pilot_skills: number;
-    minimum_mech_skills: number;
-    minimum_pilot_talents: number;
-    trigger_bonus_per_rank: number;
-    max_trigger_rank: number;
-    max_pilot_level: number;
-    max_pilot_weapons: number;
-    max_pilot_armor: number;
-    max_pilot_gear: number;
-    max_frame_size: number;
-    max_mech_armor: number;
-    max_hase: number;
-    mount_fittings: MountFittings;
-    overcharge: string[];
-    skill_headers: SkillHeader[];
-  };
-
-  export type MountFittings = {
-    Auxiliary: string[];
-    Main: string[];
-    Flex: string[];
-    Heavy: string[];
-  };
-
-  export type SkillHeader = {
-    attr: string;
-    description: string;
-  };
-
   export type SkillRule = {
     id: string;
     name: string;
@@ -68,47 +30,12 @@ declare module "lancer-data" {
     family: string;
   };
 
-  export type PilotGearAction = {
-    name: string;
-    activation: string;
-    detail: string;
-    pilot: boolean;
-    range?: Damage[];
-    damage?: Damage[];
-  };
-
-  export type Damage = {
-    type: string;
-    val: number;
-  };
-
-  export type Range = {
-    type: string;
-    val: number;
-  };
-
-  export type PilotGearBonus = {
-    id:
-      | "pilot_hp"
-      | "pilot_evasion"
-      | "pilot_edef"
-      | "pilot_speed"
-      | "pilot_armor";
-    val: number;
-    replace?: boolean;
-  };
-
-  export type MechBonus = {
-    id: string;
-    val?: number;
-  };
-
   export type Deployable = {
     name: string;
     type: string;
     detail: string;
     pilot: boolean;
-    actions: DeployableAction[];
+    actions: ActiveAction[];
   };
 
   export interface SystemDeployable {
@@ -130,21 +57,6 @@ declare module "lancer-data" {
     tags?: Tag[];
     deactivation?: ActivationType;
   }
-
-  export type DeployableAction = {
-    name: string;
-    activation: Activation;
-    detail: string;
-    pilot: boolean;
-  };
-
-  export type Tag = {
-    id: string;
-    name: string;
-    description: string;
-    filter_ignore?: boolean;
-    hidden?: boolean;
-  };
 
   export enum PilotGearType {
     Armor = "Armor",
@@ -181,37 +93,6 @@ declare module "lancer-data" {
     val: number;
   };
 
-  export type Art = {
-    tag: string;
-    src: string;
-  };
-
-  export type ActiveAction = {
-    name: string;
-    activation: ActivationType;
-    frequency?: string; // has some magic values
-    trigger?: string;
-    detail: string;
-    init?: string;
-    tech_attack?: boolean;
-  };
-
-  export type PassiveAction = {
-    name: string;
-    activation: ActivationType;
-    detail: string;
-    pilot?: boolean;
-  };
-
-  export type Counter = {
-    id: string;
-    name: string;
-    default_value: number;
-    min: number;
-    max: number;
-    level?: number;
-  };
-
   export type CoreSystemDeployable = {
     name: string;
     type: DeployableType;
@@ -241,21 +122,20 @@ declare module "lancer-data" {
     active_bonuses?: MechBonus[];
   };
 
-  export type FrameStats = {
+  export type FrameStats = EntityStats & {
     size: number;
     structure: number;
     stress: number;
-    armor: number;
-    hp: number;
-    evasion: number;
-    edef: number;
-    heatcap: number;
-    repcap: number;
-    sensor_range: number;
-    tech_attack: number;
-    save: number;
-    speed: number;
     sp: number;
+  };
+
+  export type Trait = {
+    name: string;
+    description: string;
+    use?: string;
+    bonuses?: MechBonus[];
+    synergies?: Synergy[];
+    actions?: ActiveAction[];
   };
 
   export type FrameRule = {
@@ -275,25 +155,6 @@ declare module "lancer-data" {
     other_art?: Art[];
     data_type?: string;
     counters?: Counter[];
-  };
-
-  export type Manufacturer = {
-    id: string;
-    name: string;
-    logo: string;
-    light: string;
-    dark: string;
-    quote: string;
-    description: string;
-  };
-
-  export type Status = {
-    name: string;
-    icon: string;
-    type: "Condition" | "Status";
-    terse: string;
-    exclusive?: "Mech" | "Pilot";
-    effects: string;
   };
 
   export const rules: Rules;
