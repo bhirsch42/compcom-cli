@@ -1,14 +1,8 @@
 import React from "react";
 import { Box, Text } from "ink";
-import lancerData from "lancer-data";
 import { ImportedPilot } from "./types/Pilot";
-import Skill from "./Skill";
-import PilotGear from "./PilotGear";
-import Section from "./Section";
-import Table from "./Table";
-import License from "./License";
-import TypeyText from "./TypeyText";
 import { last } from "ramda";
+import lancerData from "./types/lancer-data";
 
 const { rules, frames } = lancerData;
 

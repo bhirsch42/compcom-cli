@@ -12,3 +12,5 @@ export type LancerData = {
   frames: FrameRule[];
   manufacturers: Manufacturer[];
 };
+
+export default lancerData as LancerData;

@@ -1,9 +1,9 @@
 import { Box } from "ink";
 import React from "react";
 import { PilotSkill } from "./types/Skill";
-import lancerData from "lancer-data";
 import { find, propEq } from "ramda";
 import TypeyText from "./TypeyText";
+import lancerData from "./types/lancer-data";
 
 const { skills } = lancerData;
 

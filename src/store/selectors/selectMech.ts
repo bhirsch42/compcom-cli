@@ -1,7 +1,8 @@
 import { any, find, propEq } from "ramda";
 import { StoreState } from "../../hooks/useStore";
 import { ImportedMech } from "../../mech";
-import lancerData, { FrameRule, pilot_gear } from "lancer-data";
+import lancerData from "../../types/lancer-data";
+import { FrameRule } from "../../types/lancer-data/mech/frame/Frame";
 const { frames } = lancerData;
 
 export type Mech = Omit<ImportedMech, "frame"> & {
@@ -25,9 +26,6 @@ export const selectMech: SelectMech = (mechId) => (state) => {
   const frame = find(propEq("id", importedMech.frame), frames);
 
   if (!frame) return null;
-
-  frame.core_system.active_bonuses;
-  importedPilot.core_bonuses;
 
   const mech = {
     ...importedMech,

@@ -1,10 +1,10 @@
 import { License } from "./types/Pilot";
-import lancerData from "lancer-data";
 import { find, propEq } from "ramda";
 import React from "react";
 import { Box } from "ink";
 import { romanize } from "romans";
 import TypeyText from "./TypeyText";
+import lancerData from "./types/lancer-data";
 
 const { frames } = lancerData;
 

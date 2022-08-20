@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Text } from "ink";
-import lancerData from "lancer-data";
 import Skill from "./Skill";
 import PilotGear from "./PilotGear";
 import Section from "./Section";
