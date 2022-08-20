@@ -1,6 +1,6 @@
-import { CompendiumItemData } from "./CompendiumItem";
+import { CompendiumItem } from "./CompendiumItem";
 
-export type LicensedItemData = CompendiumItemData & {
+export type LicensedItemData = CompendiumItem & {
   source: string;
   license: string;
   license_level: number;
