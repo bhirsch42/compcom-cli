@@ -1,4 +1,4 @@
-import lancerData, { PilotGearBonus } from "lancer-data";
+import lancerData from "lancer-data";
 import {
   find,
   flatten,
@@ -26,17 +26,17 @@ export type Pilot = ImportedPilot & {
   speed: number;
 };
 
-type GroupedBonuses = Record<PilotGearBonus["id"], PilotGearBonus[]>;
-type AggregatedBonuses = Record<PilotGearBonus["id"], number>;
+type GroupedBonuses = Record<Bonus["id"], Bonus[]>;
+type AggregatedBonuses = Record<Bonus["id"], number>;
 
 type ComputeStat = (
   pilotStat: DerivedPilotStat,
-  bonusId: PilotGearBonus["id"]
+  bonusId: Bonus["id"]
 ) => number;
 
-const groupBonuses: (bonuses: PilotGearBonus[]) => GroupedBonuses = groupBy<
-  PilotGearBonus,
-  PilotGearBonus["id"]
+const groupBonuses: (bonuses: Bonus[]) => GroupedBonuses = groupBy<
+  Bonus,
+  Bonus["id"]
 >(prop("id"));
 
 function aggregateGroupedBonuses(
@@ -44,13 +44,12 @@ function aggregateGroupedBonuses(
   groupedBonuses: GroupedBonuses
 ): AggregatedBonuses {
   return map<GroupedBonuses, AggregatedBonuses>(
-    (groupedBonuses: PilotGearBonus[]) =>
-      aggFn(map(prop("val"), groupedBonuses)),
+    (groupedBonuses: Bonus[]) => aggFn(map(prop("val"), groupedBonuses)),
     groupedBonuses
   );
 }
 
-function applyPilotBonuses(pilot: Pilot, bonuses: PilotGearBonus[]): Pilot {
+function applyPilotBonuses(pilot: Pilot, bonuses: Bonus[]): Pilot {
   const replaceBonuses = bonuses.filter((bonus) => bonus.replace);
   const regularBonuses = bonuses.filter((bonus) => !bonus.replace);
 

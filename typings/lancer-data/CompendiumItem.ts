@@ -5,7 +5,7 @@ import { DeployableData } from "./Deployable";
 import { Synergy } from "./Synergy";
 import { Tag } from "./Tag";
 
-export type CompendiumItemData = {
+export type CompendiumItem = {
   id: string;
   name: string;
   description: string;

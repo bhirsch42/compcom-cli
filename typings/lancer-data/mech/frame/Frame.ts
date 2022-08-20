@@ -4,7 +4,7 @@ import { CoreSystemData } from "../CoreSystem";
 import { FrameStats } from "./Stats";
 import { FrameTraitData } from "./Trait";
 
-export type FrameData = LicensedItemData & {
+export type FrameRule = LicensedItemData & {
   mechtype: MechType[];
   license_level: number;
   mounts: MountType[];
