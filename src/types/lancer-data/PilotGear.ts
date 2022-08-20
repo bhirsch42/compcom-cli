@@ -3,6 +3,7 @@ import { Bonus } from "./Bonus";
 import { CompendiumItem } from "./CompendiumItem";
 import { Damage } from "./Damage";
 import { DeployableData } from "./Deployable";
+import { Range } from "./Range";
 import { Tag } from "./Tag";
 
 export enum PilotGearType {
