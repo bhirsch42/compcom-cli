@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import { find, propEq } from "ramda";
-import { parsePilots, ImportedPilot } from "./types/Pilot";
+import { PilotData } from "./types/lancer-data/pilot/Pilot";
 
 const COMPCON_FILENAMES = [
   "user.config",
@@ -19,8 +19,12 @@ type CompconFile = {
 };
 
 export type CompconData = {
-  pilots: ImportedPilot[];
+  pilots: PilotData[];
 };
+
+export function parsePilots(pilotData: string): PilotData[] {
+  return JSON.parse(pilotData) as PilotData[];
+}
 
 export async function importCompconFile(
   filename: string

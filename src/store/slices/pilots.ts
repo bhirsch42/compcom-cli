@@ -1,10 +1,10 @@
 import reduxToolkit, { PayloadAction } from "@reduxjs/toolkit";
 import { CompconData } from "../../importCompconFile";
-import { ImportedPilot } from "../../types/Pilot";
+import { PilotData } from "../../types/lancer-data/pilot/Pilot";
 const { createSlice } = reduxToolkit;
 
 type PilotsSlice = {
-  pilots: ImportedPilot[];
+  pilots: PilotData[];
 };
 
 const INITIAL_STATE: PilotsSlice = {

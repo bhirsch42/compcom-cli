@@ -4,6 +4,7 @@ import { useRouter } from "../Router";
 import useSelector from "../hooks/useSelector";
 import { selectMech } from "../store/selectors/selectMech";
 import Table from "../Table";
+import { ImportedMech } from "../mech";
 
 const MechDetailsPage: React.FC = () => {
   const { currentPage } = useRouter();
@@ -16,11 +17,28 @@ const MechDetailsPage: React.FC = () => {
   const mechInfoRows = [
     ["ID", mech.id],
     ["Name", mech.name],
+    ["Statuses", mech.statuses.join(", ")],
+    ["Conditions", mech.conditions.join(", ")],
+    ["Resistances", mech.resistances.join(", ")],
+    ["Burn", mech.burn],
+    ["Movement", mech.current_move],
+    ["Structure", mech.current_structure],
+    ["Armor", "TODO"],
+    ["HP", mech.current_hp],
+    ["Overshield", mech.overshield],
+    ["Stress", mech.current_stress],
+    ["Heat", mech.current_heat],
+    ["Repair", mech.current_repairs],
+    ["Overcharge", mech.current_overcharge],
+    ["Core Energy", mech.current_core_energy],
+    ["Speed", mech.frame.stats.speed || ""],
+    ["Evasion", mech.frame.stats.evasion || ""],
   ];
 
   return (
     <Box>
       <Table rows={mechInfoRows} />
+      <Text>{JSON.stringify(mech.loadouts[mech.active_loadout_index])}</Text>
     </Box>
   );
 };

@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Text } from "ink";
-import { ImportedPilot } from "./types/Pilot";
 import { last } from "ramda";
 import lancerData from "./types/lancer-data";
+import { PilotData } from "./types/lancer-data/pilot/Pilot";
 
 const { rules, frames } = lancerData;
 
-const PilotPreview: React.FC<{ pilot: ImportedPilot }> = ({ pilot }) => {
+const PilotPreview: React.FC<{ pilot: PilotData }> = ({ pilot }) => {
   const grit = Math.ceil(pilot.level / 2);
   const maxHp = rules.base_pilot_hp + grit;
   const eDefense = rules.base_pilot_edef;

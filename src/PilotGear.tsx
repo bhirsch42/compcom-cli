@@ -1,13 +1,14 @@
 import { Box, Text } from "ink";
 import React from "react";
 import { find, propEq } from "ramda";
-import { PilotGear } from "./types/PilotGear";
 import TypeyText from "./TypeyText";
 import lancerData from "./types/lancer-data";
+import { PilotEquipment } from "./types/lancer-data/PilotGear";
+import { EquipmentData } from "./types/lancer-data/mech/Equipment";
 
 const { pilot_gear } = lancerData;
 
-function getPilotGearRule(pilotGear: PilotGear) {
+function getPilotGearRule(pilotGear: EquipmentData) {
   const pilotGearRule = find(propEq("id", pilotGear.id), pilot_gear);
 
   if (!pilotGearRule) {
@@ -17,7 +18,7 @@ function getPilotGearRule(pilotGear: PilotGear) {
   return pilotGearRule;
 }
 
-const PilotGear: React.FC<{ pilotGear: PilotGear | null }> = ({
+const PilotGear: React.FC<{ pilotGear: EquipmentData | null }> = ({
   pilotGear,
 }) => {
   if (!pilotGear) {

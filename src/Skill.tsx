@@ -1,9 +1,9 @@
 import { Box } from "ink";
 import React from "react";
-import { PilotSkill } from "./types/Skill";
 import { find, propEq } from "ramda";
 import TypeyText from "./TypeyText";
 import lancerData from "./types/lancer-data";
+import { RankedData } from "./types/lancer-data/pilot/Ranked";
 
 const { skills } = lancerData;
 
@@ -14,7 +14,7 @@ type SkillInfo = {
   detail?: string;
 };
 
-function getSkillInfo(skill: PilotSkill): SkillInfo {
+function getSkillInfo(skill: RankedData): SkillInfo {
   if (skill.custom) {
     return {
       name: skill.id,
@@ -36,7 +36,7 @@ function getSkillInfo(skill: PilotSkill): SkillInfo {
   };
 }
 
-const Skill: React.FC<{ skill: PilotSkill }> = ({ skill }) => {
+const Skill: React.FC<{ skill: RankedData }> = ({ skill }) => {
   const skillInfo = getSkillInfo(skill);
 
   return (

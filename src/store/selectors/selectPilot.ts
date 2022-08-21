@@ -2,9 +2,19 @@ import { find, flatten, isNil, map, propEq, props, reject } from "ramda";
 import { StoreState } from "../../hooks/useStore";
 import lancerData from "../../types/lancer-data";
 const { rules, pilot_gear } = lancerData;
-import { applyPilotBonuses, Pilot } from "../../lib/applyBonuses";
+import { applyPilotBonuses } from "../../lib/applyBonuses";
+import { PilotData } from "../../types/lancer-data/pilot/Pilot";
 
 const compact = reject(isNil);
+
+export type Pilot = PilotData & {
+  grit: number;
+  maxHp: number;
+  eDefense: number;
+  speed: number;
+  evasion: number;
+  armor: number;
+};
 
 type SelectPilot = (pilotId: string) => (state: StoreState) => Pilot | null;
 

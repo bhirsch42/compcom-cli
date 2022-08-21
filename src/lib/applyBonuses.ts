@@ -1,19 +1,10 @@
 import { groupBy, map, prop, sum } from "ramda";
+import { Pilot } from "../store/selectors/selectPilot";
 import { Bonus } from "../types/lancer-data/Bonus";
-import { ImportedPilot } from "../types/Pilot";
 import evaluateModifier from "./evaluateModifier";
 
 type DerivedPilotStat = "armor" | "eDefense" | "evasion" | "maxHp" | "speed";
 type EvaluatedBonus = Omit<Bonus, "val"> & { val: number };
-
-export type Pilot = ImportedPilot & {
-  grit: number;
-  armor: number;
-  eDefense: number;
-  evasion: number;
-  maxHp: number;
-  speed: number;
-};
 
 type GroupedBonuses = Record<EvaluatedBonus["id"], EvaluatedBonus[]>;
 type AggregatedBonuses = Record<EvaluatedBonus["id"], number>;
