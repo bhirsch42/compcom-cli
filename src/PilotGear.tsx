@@ -3,7 +3,6 @@ import React from "react";
 import { find, propEq } from "ramda";
 import TypeyText from "./TypeyText";
 import lancerData from "./types/lancer-data";
-import { PilotEquipment } from "./types/lancer-data/PilotGear";
 import { EquipmentData } from "./types/lancer-data/mech/Equipment";
 
 const { pilot_gear } = lancerData;

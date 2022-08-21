@@ -4,7 +4,6 @@ import { useRouter } from "../Router";
 import useSelector from "../hooks/useSelector";
 import { selectMech } from "../store/selectors/selectMech";
 import Table from "../Table";
-import { ImportedMech } from "../mech";
 
 const MechDetailsPage: React.FC = () => {
   const { currentPage } = useRouter();

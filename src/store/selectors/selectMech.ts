@@ -1,6 +1,5 @@
 import { any, find, flatten, isNil, propEq, reject } from "ramda";
 import { StoreState } from "../../hooks/useStore";
-import { ImportedMech } from "../../mech";
 import lancerData from "../../types/lancer-data";
 import { Bonus } from "../../types/lancer-data/Bonus";
 import { EntityStats } from "../../types/lancer-data/EntityStats";
