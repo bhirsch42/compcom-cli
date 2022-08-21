@@ -1,6 +1,6 @@
-import { MechWeapon } from "./MechWeapon";
+import { MechWeaponData } from "./MechWeapon";
 
 export type WeaponSlot = {
   size: string;
-  weapon: MechWeapon | null;
+  weapon: MechWeaponData | null;
 };

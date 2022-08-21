@@ -6,8 +6,7 @@ import Section from "./Section";
 import Table from "./Table";
 import License from "./License";
 import TypeyText from "./TypeyText";
-import { Pilot } from "./store/selectors/selectPilot";
-
+import { Pilot } from "./lib/applyBonuses";
 const PilotDetail: React.FC<{ pilot: Pilot }> = ({ pilot }) => {
   const pilotInfoRows = [
     ["Name:", pilot.name],

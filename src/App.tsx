@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { PropsWithChildren, useEffect, useLayoutEffect } from "react";
 import { Box, render, Text, useStdin } from "ink";
 import { Routes } from "./Router";
 import Console from "./Console";
@@ -6,20 +6,47 @@ import { CompconDataProvider, useCompconData } from "./hooks/useCompconData";
 import { StoreProvider, useStore } from "./hooks/useStore";
 import { CommandManagerProvider } from "./hooks/useCommandManager";
 import { reverse } from "ramda";
-import HUDInner from "./HUDInner";
+import HudRoutes from "./HudRoutes";
 import { loadedPilots } from "./store/slices/pilots";
+import useRegisterCommands from "./hooks/useRegisterCommands";
 
 const App: React.FC = () => {
   const { isRawModeSupported } = useStdin();
   const compconData = useCompconData();
   const { store } = useStore();
 
+  useRegisterCommands({
+    commandBuilder(yargs) {
+      return yargs.command(
+        "help",
+        "See available commands and how to use them"
+      );
+    },
+    commandHandler(_, { yargs, argv, logger }) {
+      if (argv.help) {
+        yargs.getHelp().then((helpText) => {
+          logger.info(helpText);
+        });
+        return true;
+      }
+
+      return false;
+    },
+  });
+
   useEffect(() => {
     store.dispatch(loadedPilots(compconData));
   }, []);
 
   return (
-    <Routes initRoute={[{ name: "pilot-roster" }]}>
+    <Routes
+      initRoute={[
+        {
+          name: "mech-details",
+          mechId: "d919b8a9-da4e-4d08-a5ed-9d9fb09645ab",
+        },
+      ]}
+    >
       <Box height={process.stdout.rows - 2}>
         <Box
           width={"100%"}
@@ -31,7 +58,7 @@ const App: React.FC = () => {
           <Box position="absolute" marginTop={-1} marginLeft={2}>
             <Text color="greenBright">// HUD //</Text>
           </Box>
-          <HUDInner />
+          <HudRoutes />
         </Box>
         <Box
           borderColor="greenBright"

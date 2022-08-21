@@ -21,7 +21,12 @@ function buildArgv(
     commandHandlerGroups.map(({ commandBuilder }) => commandBuilder)
   );
 
-  const baseArgv = yargs(tokens).scriptName("compcon").help(false);
+  if (tokens[0] === "help") {
+    tokens.shift();
+    tokens.push("--help");
+  }
+
+  const baseArgv = yargs(tokens).scriptName("").help(false).version(false);
 
   return commandBuilders.reduce(
     (agg, commandBuilder) => commandBuilder(agg),
@@ -79,10 +84,15 @@ export function useRunCommand(command: Command) {
     });
   }, [command]);
 
-  function handleCommand(tokenString: string) {
+  async function handleCommand(tokenString: string) {
+    const argv = await argvP.argv;
     const isSuccess = any(
       (commandHandler) =>
-        commandHandler(tokenString, { logger: delayedLogger }),
+        commandHandler(tokenString, {
+          logger: delayedLogger,
+          yargs: argvP,
+          argv,
+        }),
       commandHandlers
     );
 

@@ -18,11 +18,17 @@ type PilotDetailsPage = {
   pilotId: string;
 };
 
+type MechDetailsPage = {
+  name: "mech-details";
+  mechId: string;
+};
+
 export type Page =
   | HomePage
   | CompendiumPage
   | PilotRosterPage
-  | PilotDetailsPage;
+  | PilotDetailsPage
+  | MechDetailsPage;
 
 type PageName = Page["name"];
 

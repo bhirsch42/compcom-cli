@@ -5,10 +5,10 @@ import { useCompconData } from "../hooks/useCompconData";
 import Header from "../Header";
 import useRegisterCommands from "../hooks/useRegisterCommands";
 import { CommandHandler } from "../hooks/useCommandManager";
-import { useLogger } from "../hooks/useLogger";
 import { find } from "ramda";
 import { useRouter } from "../Router";
 import { useDelayedLogger } from "../hooks/useDelayedLogger";
+import { CommandBuilder } from "yargs";
 
 const PilotRosterPage: React.FC = () => {
   const compconData = useCompconData();
@@ -36,7 +36,13 @@ const PilotRosterPage: React.FC = () => {
     return false;
   };
 
-  useRegisterCommands({ commandHandler, customCompletions });
+  const commandBuilder: CommandBuilder = (yargs) =>
+    yargs.command(
+      "<pilot-name>",
+      "Type a pilot's name to see their stats, gear, and mechs."
+    );
+
+  useRegisterCommands({ commandHandler, commandBuilder, customCompletions });
 
   useEffect(() => {
     logger.info("Input pilot name or callsign:");

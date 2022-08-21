@@ -17,6 +17,8 @@ export const selectMech: SelectMech = (mechId) => (state) => {
     state.pilots.pilots
   );
 
+  console.log("importedPilot", state, importedPilot);
+
   if (!importedPilot) return null;
 
   const importedMech = find(propEq("id", mechId), importedPilot.mechs);

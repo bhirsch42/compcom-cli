@@ -10,18 +10,18 @@ type LogRenderer = (log: Log) => React.ReactNode;
 
 const LogRenderers: Record<LogType, LogRenderer> = {
   [LogType.COMMAND]: (log) => (
-    <Text key={log.id} wrap="truncate">
+    <Text key={log.id} wrap="wrap">
       {"> "}
       {log.message}
     </Text>
   ),
   [LogType.INFO]: (log) => (
-    <TypeyText key={log.id} dimColor wrap="truncate">
+    <TypeyText key={log.id} dimColor wrap="wrap">
       {log.message}
     </TypeyText>
   ),
   [LogType.ERROR]: (log) => (
-    <Text key={log.id} color={"red"} wrap="truncate">
+    <Text key={log.id} color={"red"} wrap="wrap">
       {log.message}
     </Text>
   ),
@@ -109,7 +109,6 @@ const Console: React.FC = () => {
     <Box
       paddingX={1}
       width={60}
-      minWidth={60}
       flexDirection="column"
       justifyContent="flex-end"
     >

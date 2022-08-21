@@ -3,9 +3,9 @@ import { Route, useRouter } from "./Router";
 import Compendium from "./Compendium";
 import PilotRosterPage from "./pages/PilotRosterPage";
 import { CommandBuilder, CommandHandler } from "./hooks/useCommandManager";
-import { useLogger } from "./hooks/useLogger";
 import useRegisterCommands from "./hooks/useRegisterCommands";
 import PilotDetailsPage from "./pages/PilotDetailsPage";
+import MechDetailsPage from "./pages/MechDetailsPage";
 
 const commandBuilder: CommandBuilder = (argv) => {
   return argv
@@ -13,7 +13,7 @@ const commandBuilder: CommandBuilder = (argv) => {
     .command("pilots", "Open the pilot roster", {});
 };
 
-const HUDInner: React.FC = () => {
+const Routes: React.FC = () => {
   const { goTo } = useRouter();
 
   const commandHandler: CommandHandler = (token: string, { logger }) => {
@@ -44,8 +44,11 @@ const HUDInner: React.FC = () => {
       <Route path="pilot-details">
         <PilotDetailsPage />
       </Route>
+      <Route path="mech-details">
+        <MechDetailsPage />
+      </Route>
     </>
   );
 };
 
-export default HUDInner;
+export default Routes;

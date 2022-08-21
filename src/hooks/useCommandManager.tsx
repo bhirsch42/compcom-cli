@@ -1,12 +1,16 @@
 import React, { PropsWithChildren } from "react";
-import { Argv } from "yargs";
+import { Arguments, Argv, CamelCaseKey } from "yargs";
 import { always as noop } from "ramda";
 import { UseLoggerReturns } from "./useLogger";
+
+type ParsedArgs<T = unknown> = {
+  [key in keyof Arguments<T> as key | CamelCaseKey<key>]: Arguments<T>[key];
+};
 
 export type CommandBuilder = (argv: Argv) => Argv;
 export type CommandHandler = (
   tokens: string,
-  ctx: { logger: UseLoggerReturns }
+  ctx: { logger: UseLoggerReturns; yargs: Argv; argv: ParsedArgs }
 ) => boolean;
 export type CommandHandlerGroup = {
   commandBuilder?: CommandBuilder;
