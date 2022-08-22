@@ -7,6 +7,8 @@ import lancerData from "lancer-data";
 import { TalentData } from "./pilot/Talent";
 import { Tag } from "./Tag";
 import { MechSystemData } from "./mech/MechSystem";
+import { Bonus } from "./Bonus";
+import { CoreBonusData } from "./pilot/CoreBonus";
 
 export type LancerData = {
   rules: Rules;
@@ -17,6 +19,7 @@ export type LancerData = {
   talents: TalentData[];
   tags: Tag[];
   systems: MechSystemData[];
+  core_bonuses: CoreBonusData[];
 };
 
 export default lancerData as LancerData;

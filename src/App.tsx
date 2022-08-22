@@ -77,8 +77,13 @@ const App: React.FC = () => {
           {isRawModeSupported ? (
             <Console />
           ) : (
-            <Box borderStyle="single" paddingX={1}>
-              <Text>Raw mode not supported. Console disabled.</Text>
+            <Box
+              borderStyle="single"
+              paddingX={1}
+              flexGrow={1}
+              borderColor="red"
+            >
+              <Text color="red">Raw mode not supported. Console disabled.</Text>
             </Box>
           )}
         </Box>

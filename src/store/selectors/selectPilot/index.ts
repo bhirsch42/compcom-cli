@@ -5,6 +5,7 @@ import { applyPilotBonuses } from "../../../lib/applyBonuses";
 import { PilotData } from "../../../types/lancer-data/pilot/Pilot";
 import { getPilotTalents, Talent } from "./getPilotTalents";
 import { getPilotBonuses } from "./getPilotBonuses";
+import { getGrit } from "./getGrit";
 
 const { rules } = lancerData;
 
@@ -25,13 +26,13 @@ export const selectPilot: SelectPilot =
     const pilotData = find(propEq("id", pilotId), state.pilots.pilots);
     if (!pilotData) return null;
 
-    const grit = Math.ceil(pilotData.level / 2);
+    const grit = getGrit(pilotData);
 
     const talents: Talent[] = getPilotTalents(pilotData);
 
     const pilotBonuses = getPilotBonuses(pilotData);
 
-    const basePilot = {
+    const basePilot: Pilot = {
       ...pilotData,
       talents,
       grit,
@@ -42,5 +43,5 @@ export const selectPilot: SelectPilot =
       armor: 0,
     };
 
-    return applyPilotBonuses(basePilot, pilotBonuses);
+    return applyPilotBonuses(basePilot, pilotData, pilotBonuses);
   };

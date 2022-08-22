@@ -1,29 +1,48 @@
-import { any, find, flatten, isNil, map, pluck, propEq, reject } from "ramda";
+import { any, find, map, propEq } from "ramda";
 import { StoreState } from "../../../hooks/useStore";
+import { applyMechBonuses } from "../../../lib/applyBonuses";
 import lancerData from "../../../types/lancer-data";
-import { Bonus } from "../../../types/lancer-data/Bonus";
-import { EntityStats } from "../../../types/lancer-data/EntityStats";
-import { EquipmentData } from "../../../types/lancer-data/mech/Equipment";
 import { FrameRule } from "../../../types/lancer-data/mech/frame/Frame";
-import { LoadoutData } from "../../../types/lancer-data/mech/Loadout";
+import { FrameStats } from "../../../types/lancer-data/mech/frame/Stats";
 import { MechData } from "../../../types/lancer-data/mech/Mech";
-import { MechSystemData } from "../../../types/lancer-data/mech/MechSystem";
+import { PilotData } from "../../../types/lancer-data/pilot/Pilot";
+import { getGrit } from "../selectPilot/getGrit";
 import { getPilotBonuses } from "../selectPilot/getPilotBonuses";
 import { getLoadout, Loadout } from "./getLoadout";
-import { getMechSystems, MechSystem } from "./getMechSystems";
+import { getMechBonuses } from "./getMechBonuses";
 const { frames } = lancerData;
 
 export type Mech = Omit<MechData, "frame" | "loadouts"> & {
   frame: FrameRule;
-  stats: EntityStats;
+  stats: FrameStats;
   loadouts: Loadout[];
   activeLoadout: Loadout;
+  maxCoreEnergy: number;
+  attackBonus: number;
+  limitedSystemBonus: number;
 };
 
 type SelectMech = (mechId: string) => (state: StoreState) => Mech | null;
 
-function pluckBonuses(records: { bonuses?: Bonus[] }[]): Bonus[] {
-  return flatten(reject(isNil, pluck("bonuses", records)));
+function applyPilotSkills(mech: Mech, pilotData: PilotData): Mech {
+  const [hull, agility, systems, engineering] = pilotData.mechSkills;
+  const grit = getGrit(pilotData);
+  const stats = mech.stats;
+
+  return {
+    ...mech,
+    stats: {
+      ...stats,
+      hp: stats.hp + 2 * hull + grit,
+      repcap: stats.repcap + hull,
+      evasion: stats.evasion + agility,
+      edef: stats.edef + systems,
+      tech_attack: stats.tech_attack + systems,
+      heatcap: stats.heatcap + engineering,
+    },
+    attackBonus: mech.attackBonus + grit,
+    limitedSystemBonus: Math.floor(engineering / 2),
+  };
 }
 
 export const selectMech: SelectMech = (mechId) => (state) => {
@@ -34,39 +53,31 @@ export const selectMech: SelectMech = (mechId) => (state) => {
 
   if (!pilotData) return null;
 
-  const importedMech = find(propEq("id", mechId), pilotData.mechs);
+  const mechData = find(propEq("id", mechId), pilotData.mechs);
 
-  if (!importedMech) return null;
+  if (!mechData) return null;
 
-  const frame = find(propEq("id", importedMech.frame), frames);
+  const frame = find(propEq("id", mechData.frame), frames);
 
   if (!frame) return null;
 
-  const loadouts = map(getLoadout, importedMech.loadouts);
-  const activeLoadout = loadouts[importedMech.active_loadout_index];
+  const loadouts = map(getLoadout, mechData.loadouts);
+  const activeLoadout = loadouts[mechData.active_loadout_index];
 
-  const pilotBonuses = getPilotBonuses(pilotData);
-
-  const bonuses: Bonus[] = flatten(
-    reject(isNil, [
-      frame.bonuses,
-      importedMech.core_active ? frame.core_system.active_bonuses : null,
-      frame.core_system.passive_bonuses,
-      pilotBonuses,
-      pluckBonuses(activeLoadout.systems),
-      pluckBonuses(activeLoadout.integratedSystems),
-    ])
-  );
-
-  // console.log(activeLoadout);
-
-  const mech = {
-    ...importedMech,
+  let mech: Mech = {
+    ...mechData,
     frame,
     stats: frame.stats,
     loadouts,
     activeLoadout,
+    maxCoreEnergy: 1,
+    attackBonus: 0,
+    limitedSystemBonus: 0,
   };
 
-  return mech;
+  mech = applyPilotSkills(mech, pilotData);
+
+  const bonuses = [...getMechBonuses(mech), ...getPilotBonuses(pilotData)];
+
+  return applyMechBonuses(mech, pilotData, bonuses);
 };

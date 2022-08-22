@@ -1,6 +1,9 @@
 import { groupBy, map, prop, sum } from "ramda";
+import { Mech } from "../store/selectors/selectMech";
 import { Pilot } from "../store/selectors/selectPilot";
+import { getGrit } from "../store/selectors/selectPilot/getGrit";
 import { Bonus, BonusId } from "../types/lancer-data/Bonus";
+import { PilotData } from "../types/lancer-data/pilot/Pilot";
 import evaluateModifier from "./evaluateModifier";
 
 type EvaluatedBonus = Omit<Bonus, "val"> & { val: number };
@@ -8,10 +11,7 @@ type EvaluatedBonus = Omit<Bonus, "val"> & { val: number };
 type GroupedBonuses = Record<EvaluatedBonus["id"], EvaluatedBonus[]>;
 type AggregatedBonuses = Record<EvaluatedBonus["id"], number>;
 
-type ComputeStat<T> = (
-  stat: keyof T,
-  bonusId: EvaluatedBonus["id"]
-) => { [key in string]: number };
+type ComputeStat = (initialValue: number, bonusId: BonusId) => number;
 
 const groupBonuses: (bonuses: EvaluatedBonus[]) => GroupedBonuses = groupBy<
   EvaluatedBonus,
@@ -29,21 +29,21 @@ function aggregateGroupedBonuses(
   );
 }
 
-function evaluateBonus(bonus: Bonus, pilot: Pilot): EvaluatedBonus {
+function evaluateBonus(bonus: Bonus, pilot: PilotData): EvaluatedBonus {
   return {
     ...bonus,
     val: evaluateModifier(bonus.val, {
-      grit: pilot.grit,
+      grit: getGrit(pilot),
       ll: pilot.level,
     }),
   };
 }
 
 function applyBonuses<T>(
-  pilot: Pilot,
+  pilot: PilotData,
   bonuses: Bonus[],
   entity: T,
-  apply: (entity: T, getStat: ComputeStat<T>) => T
+  apply: (entity: T, getStat: ComputeStat) => T
 ): T {
   const evaluatedBonuses = bonuses.map((bonus) => evaluateBonus(bonus, pilot));
   const replaceBonuses = evaluatedBonuses.filter((bonus) => bonus.replace);
@@ -62,29 +62,47 @@ function applyBonuses<T>(
     groupedRegularBonuses
   );
 
-  const computeStat: ComputeStat<T> = (stat: keyof T, bonusId: BonusId) => {
-    const entityStat = entity[stat];
-
-    if (typeof entityStat !== "number")
-      throw new Error(`Could not compute stat: ${String(stat)}`);
-
-    const val = replaceBonusAggregations[bonusId]
+  const computeStat: ComputeStat = (initialValue: number, bonusId: BonusId) => {
+    return replaceBonusAggregations[bonusId]
       ? replaceBonusAggregations[bonusId]
-      : entityStat + regularBonusAggregations[bonusId];
-
-    return { [stat]: val };
+      : initialValue + (regularBonusAggregations[bonusId] || 0);
   };
 
   return apply(entity, computeStat);
 }
 
-export function applyPilotBonuses(pilot: Pilot, bonuses: Bonus[]): Pilot {
-  return applyBonuses(pilot, bonuses, pilot, (pilot, getStat) => ({
+export function applyPilotBonuses(
+  pilot: Pilot,
+  pilotData: PilotData,
+  bonuses: Bonus[]
+): Pilot {
+  return applyBonuses(pilotData, bonuses, pilot, (pilot, stat) => ({
     ...pilot,
-    ...getStat("armor", "pilot_armor"),
-    ...getStat("eDefense", "pilot_edef"),
-    ...getStat("evasion", "pilot_evasion"),
-    ...getStat("maxHp", "pilot_hp"),
-    ...getStat("speed", "pilot_speed"),
+    armor: stat(pilot.armor, "pilot_armor"),
+    eDefense: stat(pilot.eDefense, "pilot_edef"),
+    evasion: stat(pilot.evasion, "pilot_evasion"),
+    maxHp: stat(pilot.maxHp, "pilot_hp"),
+    speed: stat(pilot.speed, "pilot_speed"),
+  }));
+}
+
+export function applyMechBonuses(
+  mech: Mech,
+  pilotData: PilotData,
+  bonuses: Bonus[]
+): Mech {
+  return applyBonuses(pilotData, bonuses, mech, (mech, stat) => ({
+    ...mech,
+    stats: {
+      ...mech.stats,
+      hp: stat(mech.stats.hp, "hp"),
+      armor: mech.stats.armor && stat(mech.stats.armor, "armor"),
+      heatcap: mech.stats.heatcap && stat(mech.stats.heatcap, "heatcap"),
+      edef: mech.stats.edef && stat(mech.stats.edef, "edef"),
+      size: mech.stats.size && stat(mech.stats.size, "size"),
+      evasion: mech.stats.evasion && stat(mech.stats.evasion, "evasion"),
+    },
+    maxCoreEnergy: stat(mech.maxCoreEnergy, "core_power"),
+    attackBonus: stat(mech.attackBonus, "attack"),
   }));
 }
