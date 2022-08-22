@@ -1,8 +1,8 @@
-import { CompendiumItem } from "./CompendiumItem";
+import { CompendiumItemData } from "./CompendiumItem";
 import { EntityStats } from "./EntityStats";
 import { ActivationType } from "./enums";
 
-export type DeployableData = CompendiumItem &
+export type DeployableData = CompendiumItemData &
   EntityStats & {
     detail: string;
     type: string; // this is for UI furnishing only

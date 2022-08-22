@@ -1,6 +1,6 @@
 import { Action } from "./Action";
 import { Bonus } from "./Bonus";
-import { CompendiumItem } from "./CompendiumItem";
+import { CompendiumItemData } from "./CompendiumItem";
 import { Damage } from "./Damage";
 import { DeployableData } from "./Deployable";
 import { Range } from "./Range";
@@ -12,7 +12,7 @@ export enum PilotGearType {
   Weapon = "Weapon",
 }
 
-export type PilotEquipment = CompendiumItem & {
+export type PilotEquipmentData = CompendiumItemData & {
   name: string;
   type: PilotGearType;
   description: string;

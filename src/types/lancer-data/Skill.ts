@@ -1,3 +1,3 @@
-import { CompendiumItem } from "./CompendiumItem";
+import { CompendiumItemData } from "./CompendiumItem";
 
-export type Skill = CompendiumItem & { detail: string; family: string };
+export type Skill = CompendiumItemData & { detail: string; family: string };

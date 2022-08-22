@@ -37,7 +37,6 @@ const MechDetailsPage: React.FC = () => {
   return (
     <Box>
       <Table rows={mechInfoRows} />
-      <Text>{JSON.stringify(mech.loadouts[mech.active_loadout_index])}</Text>
     </Box>
   );
 };

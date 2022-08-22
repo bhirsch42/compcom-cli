@@ -41,7 +41,7 @@ export const selectMech: SelectMech = (mechId) => (state) => {
     ])
   );
 
-  console.log(activeLoadout);
+  // console.log(activeLoadout);
 
   const mech = {
     ...importedMech,
