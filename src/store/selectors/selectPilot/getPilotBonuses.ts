@@ -20,5 +20,10 @@ export function getPilotBonuses(pilotData: PilotData): Bonus[] {
     flatten(pluck("bonuses", flatten(pluck("activeRanks", talents))))
   );
 
-  return [...gearBonuses, ...talentBonuses];
+  const reservesBonuses = reject(
+    isNil,
+    flatten(pluck("bonuses", pilotData.reserves))
+  );
+
+  return [...gearBonuses, ...talentBonuses, ...reservesBonuses];
 }

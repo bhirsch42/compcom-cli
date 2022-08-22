@@ -45,10 +45,9 @@ const Skill: React.FC<{ skill: RankedData }> = ({ skill }) => {
         (+{skill.rank * 2}) {skillInfo.name}
       </TypeyText>
       {skillInfo.description ? (
-        <TypeyText dimColor>
-          {"  "}
-          {skillInfo.description}
-        </TypeyText>
+        <Box marginLeft={2}>
+          <TypeyText dimColor>{skillInfo.description}</TypeyText>
+        </Box>
       ) : null}
       {/* <TypeyText>{skillInfo.detail}</TypeyText> */}
     </Box>

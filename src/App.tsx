@@ -41,14 +41,14 @@ const App: React.FC = () => {
   return (
     <Routes
       initRoute={[
-        // {
-        //   name: "mech-details",
-        //   mechId: "d919b8a9-da4e-4d08-a5ed-9d9fb09645ab",
-        // },
         {
-          name: "pilot-details",
-          pilotId: "889b1490-9b49-443e-954f-1bfbb38f99b3",
+          name: "mech-details",
+          mechId: "d919b8a9-da4e-4d08-a5ed-9d9fb09645ab",
         },
+        // {
+        //   name: "pilot-details",
+        //   pilotId: "889b1490-9b49-443e-954f-1bfbb38f99b3",
+        // },
       ]}
     >
       <Box height={process.stdout.rows - 2}>

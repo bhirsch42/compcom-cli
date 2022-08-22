@@ -33,24 +33,27 @@ const PilotGear: React.FC<{ pilotGear: EquipmentData | null }> = ({
   const pilotGearRule = getPilotGearRule(pilotGear);
 
   return (
-    <Box paddingX={1} flexDirection="column">
+    <Box flexDirection="column">
       <TypeyText>{pilotGearRule.name}</TypeyText>
-      {pilotGearRule.damage && (
-        <TypeyText>
-          {"  "}
-          Damage:{" "}
-          {pilotGearRule.damage
-            .map((damage) => `${damage.type} (${damage.val})`)
-            ?.join(", ")}
-        </TypeyText>
-      )}
-      {pilotGearRule.range && (
-        <TypeyText>
-          {"  "}
-          Range:{" "}
-          {pilotGearRule.range.map((range) => `${range.val}`)?.join(", ")}
-        </TypeyText>
-      )}
+      <Box marginLeft={2} flexDirection="column">
+        {pilotGearRule.damage && (
+          <TypeyText>
+            Damage:{" "}
+            {pilotGearRule.damage
+              .map((damage) => `${damage.type} (${damage.val})`)
+              ?.join(", ")}
+          </TypeyText>
+        )}
+        {pilotGearRule.range && (
+          <TypeyText>
+            Range:{" "}
+            {pilotGearRule.range.map((range) => `${range.val}`)?.join(", ")}
+          </TypeyText>
+        )}
+        {pilotGearRule.description && (
+          <TypeyText dimColor>{pilotGearRule.description}</TypeyText>
+        )}
+      </Box>
     </Box>
   );
 };

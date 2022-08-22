@@ -6,6 +6,7 @@ import { Skill } from "./Skill";
 import lancerData from "lancer-data";
 import { TalentData } from "./pilot/Talent";
 import { Tag } from "./Tag";
+import { MechSystemData } from "./mech/MechSystem";
 
 export type LancerData = {
   rules: Rules;
@@ -15,6 +16,7 @@ export type LancerData = {
   manufacturers: Manufacturer[];
   talents: TalentData[];
   tags: Tag[];
+  systems: MechSystemData[];
 };
 
 export default lancerData as LancerData;

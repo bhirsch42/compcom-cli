@@ -1,6 +1,6 @@
 import { DamageType, RangeType, WeaponSize, WeaponType } from "./enums";
 
-type BonusId =
+export type BonusId =
   | "ai_cap"
   | "armor"
   | "cb_point"

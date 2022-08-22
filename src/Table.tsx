@@ -18,34 +18,17 @@ const Table: React.FC<{ rows: (JSX.Element | string | number)[][] }> = ({
             flexDirection="column"
             key={i}
           >
-            {column.map((cell, j) => (
-              <TypeyText key={j}>{cell}</TypeyText>
-            ))}
+            {column.map((cell, j) => {
+              if (typeof cell === "number" || typeof cell === "string")
+                return <TypeyText key={j}>{cell}</TypeyText>;
+
+              return cell;
+            })}
           </Box>
         );
       })}
     </Box>
   );
-  // <Box>
-  //   <Box paddingRight={2} flexDirection={"column"}>
-  //     <Text>Name:</Text>
-  //     <Text>Level:</Text>
-  //     <Text>HP:</Text>
-  //     <Text>Grit:</Text>
-  //     <Text>E-Defense:</Text>
-  //     <Text>Speed:</Text>
-  //   </Box>
-  //   <Box flexDirection={"column"}>
-  //     <Text>{pilot.name}</Text>
-  //     <Text>{pilot.level}</Text>
-  //     <Text>
-  //       {pilot.current_hp}/{maxHp}
-  //     </Text>
-  //     <Text>+{grit}</Text>
-  //     <Text>{eDefense}</Text>
-  //     <Text>{speed}</Text>
-  //   </Box>
-  // </Box>;
 };
 
 export default Table;
