@@ -3,7 +3,7 @@ import { Bonus } from "./Bonus";
 import { CounterData } from "./Counter";
 import { DeployableData } from "./Deployable";
 import { Synergy } from "./Synergy";
-import { Tag } from "./Tag";
+import { TagRef } from "./Tag";
 
 export type CompendiumItemData = {
   id: string;
@@ -17,5 +17,5 @@ export type CompendiumItemData = {
   special_equipment?: string[];
   integrated?: string[];
   brew?: string;
-  tags?: Tag[];
+  tags?: TagRef[];
 };

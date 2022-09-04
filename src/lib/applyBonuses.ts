@@ -3,15 +3,14 @@ import { Mech } from "../store/selectors/selectMech";
 import { Pilot } from "../store/selectors/selectPilot";
 import { getGrit } from "../store/selectors/selectPilot/getGrit";
 import { Bonus, BonusId } from "../types/lancer-data/Bonus";
+import { FrameStats } from "../types/lancer-data/mech/frame/Stats";
 import { PilotData } from "../types/lancer-data/pilot/Pilot";
 import evaluateModifier from "./evaluateModifier";
 
 type EvaluatedBonus = Omit<Bonus, "val"> & { val: number };
-
 type GroupedBonuses = Record<EvaluatedBonus["id"], EvaluatedBonus[]>;
 type AggregatedBonuses = Record<EvaluatedBonus["id"], number>;
-
-type ComputeStat = (initialValue: number, bonusId: BonusId) => number;
+type ApplyBonus = (bonusId: BonusId, initialValue: number) => number;
 
 const groupBonuses: (bonuses: EvaluatedBonus[]) => GroupedBonuses = groupBy<
   EvaluatedBonus,
@@ -39,13 +38,11 @@ function evaluateBonus(bonus: Bonus, pilot: PilotData): EvaluatedBonus {
   };
 }
 
-function applyBonuses<T>(
-  pilot: PilotData,
-  bonuses: Bonus[],
-  entity: T,
-  apply: (entity: T, getStat: ComputeStat) => T
-): T {
-  const evaluatedBonuses = bonuses.map((bonus) => evaluateBonus(bonus, pilot));
+function getApplyBonus(pilotData: PilotData, bonuses: Bonus[]): ApplyBonus {
+  const evaluatedBonuses = bonuses.map((bonus) =>
+    evaluateBonus(bonus, pilotData)
+  );
+
   const replaceBonuses = evaluatedBonuses.filter((bonus) => bonus.replace);
   const regularBonuses = evaluatedBonuses.filter((bonus) => !bonus.replace);
 
@@ -62,13 +59,11 @@ function applyBonuses<T>(
     groupedRegularBonuses
   );
 
-  const computeStat: ComputeStat = (initialValue: number, bonusId: BonusId) => {
+  return (bonusId, initialValue) => {
     return replaceBonusAggregations[bonusId]
       ? replaceBonusAggregations[bonusId]
       : initialValue + (regularBonusAggregations[bonusId] || 0);
   };
-
-  return apply(entity, computeStat);
 }
 
 export function applyPilotBonuses(
@@ -76,14 +71,16 @@ export function applyPilotBonuses(
   pilotData: PilotData,
   bonuses: Bonus[]
 ): Pilot {
-  return applyBonuses(pilotData, bonuses, pilot, (pilot, stat) => ({
+  const applyBonus = getApplyBonus(pilotData, bonuses);
+
+  return {
     ...pilot,
-    armor: stat(pilot.armor, "pilot_armor"),
-    eDefense: stat(pilot.eDefense, "pilot_edef"),
-    evasion: stat(pilot.evasion, "pilot_evasion"),
-    maxHp: stat(pilot.maxHp, "pilot_hp"),
-    speed: stat(pilot.speed, "pilot_speed"),
-  }));
+    armor: applyBonus("pilot_armor", pilot.armor),
+    eDefense: applyBonus("pilot_edef", pilot.eDefense),
+    evasion: applyBonus("pilot_evasion", pilot.evasion),
+    maxHp: applyBonus("pilot_hp", pilot.maxHp),
+    speed: applyBonus("pilot_speed", pilot.speed),
+  };
 }
 
 export function applyMechBonuses(
@@ -91,18 +88,24 @@ export function applyMechBonuses(
   pilotData: PilotData,
   bonuses: Bonus[]
 ): Mech {
-  return applyBonuses(pilotData, bonuses, mech, (mech, stat) => ({
+  const applyBonus = getApplyBonus(pilotData, bonuses);
+
+  const stats: FrameStats = {
+    ...mech.stats,
+    hp: applyBonus("hp", mech.stats.hp),
+    armor: applyBonus("armor", mech.stats.armor),
+    heatcap: applyBonus("heatcap", mech.stats.heatcap),
+    edef: applyBonus("edef", mech.stats.edef),
+    size: applyBonus("size", mech.stats.size),
+    evasion: applyBonus("evasion", mech.stats.evasion),
+    sensor_range: applyBonus("sensor", mech.stats.sensor_range),
+    save: applyBonus("save", mech.stats.save),
+  };
+
+  return {
     ...mech,
-    stats: {
-      ...mech.stats,
-      hp: stat(mech.stats.hp, "hp"),
-      armor: mech.stats.armor && stat(mech.stats.armor, "armor"),
-      heatcap: mech.stats.heatcap && stat(mech.stats.heatcap, "heatcap"),
-      edef: mech.stats.edef && stat(mech.stats.edef, "edef"),
-      size: mech.stats.size && stat(mech.stats.size, "size"),
-      evasion: mech.stats.evasion && stat(mech.stats.evasion, "evasion"),
-    },
-    maxCoreEnergy: stat(mech.maxCoreEnergy, "core_power"),
-    attackBonus: stat(mech.attackBonus, "attack"),
-  }));
+    stats,
+    maxCoreEnergy: applyBonus("core_power", mech.maxCoreEnergy),
+    attackBonus: applyBonus("attack", mech.attackBonus),
+  };
 }

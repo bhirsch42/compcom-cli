@@ -4,7 +4,7 @@ import { CompendiumItemData } from "./CompendiumItem";
 import { Damage } from "./Damage";
 import { DeployableData } from "./Deployable";
 import { Range } from "./Range";
-import { Tag } from "./Tag";
+import { TagData } from "./Tag";
 
 export enum PilotGearType {
   Armor = "Armor",
@@ -16,7 +16,7 @@ export type PilotEquipmentData = CompendiumItemData & {
   name: string;
   type: PilotGearType;
   description: string;
-  tags?: Tag[];
+  tags?: TagData[];
   range?: Range[];
   damage?: Damage[];
   effect?: string;

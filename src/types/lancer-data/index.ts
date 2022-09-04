@@ -5,21 +5,23 @@ import { Rules } from "./Rules";
 import { Skill } from "./Skill";
 import lancerData from "lancer-data";
 import { TalentData } from "./pilot/Talent";
-import { Tag } from "./Tag";
+import { TagData } from "./Tag";
 import { MechSystemData } from "./mech/MechSystem";
 import { Bonus } from "./Bonus";
 import { CoreBonusData } from "./pilot/CoreBonus";
+import { MechWeaponData } from "./mech/MechWeapon";
 
 export type LancerData = {
-  rules: Rules;
-  skills: Skill[];
-  pilot_gear: PilotEquipmentData[];
+  core_bonuses: CoreBonusData[];
   frames: FrameRule[];
   manufacturers: Manufacturer[];
-  talents: TalentData[];
-  tags: Tag[];
+  pilot_gear: PilotEquipmentData[];
+  rules: Rules;
+  skills: Skill[];
   systems: MechSystemData[];
-  core_bonuses: CoreBonusData[];
+  tags: TagData[];
+  talents: TalentData[];
+  weapons: MechWeaponData[];
 };
 
 export default lancerData as LancerData;

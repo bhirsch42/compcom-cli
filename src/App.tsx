@@ -41,9 +41,13 @@ const App: React.FC = () => {
   return (
     <Routes
       initRoute={[
+        // {
+        //   name: "mech-details",
+        //   mechId: "49693753-49bd-4dbc-a78a-7b430d99dda1",
+        // },
         {
           name: "mech-details",
-          mechId: "d919b8a9-da4e-4d08-a5ed-9d9fb09645ab",
+          mechId: "d690b08c-3776-42e9-acab-ec2f4080d610",
         },
         // {
         //   name: "pilot-details",

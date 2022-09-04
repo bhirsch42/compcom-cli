@@ -1,5 +1,5 @@
 import { EquipmentData } from "./Equipment";
-import { MechWeaponData } from "./MechWeapon";
+import { MechWeaponSaveData } from "./MechWeapon";
 import { MountData } from "./Mount";
 
 export type LoadoutData = {
@@ -8,7 +8,7 @@ export type LoadoutData = {
   systems: EquipmentData[];
   integratedSystems: EquipmentData[];
   mounts: MountData[];
-  integratedMounts: { weapon: MechWeaponData }[];
+  integratedMounts: { weapon: MechWeaponSaveData }[];
   improved_armament: MountData;
   integratedWeapon: MountData;
 };

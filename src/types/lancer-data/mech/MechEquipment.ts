@@ -1,13 +1,13 @@
 import { LicensedItemData } from "../LicensedItemData";
-import { Tag } from "../Tag";
+import { TagRef } from "../Tag";
 
 export type MechEquipmentData = LicensedItemData & {
   sp: number;
-  tags: Tag[];
+  tags?: TagRef[];
   effect: string;
   talent_item?: boolean;
   frame_id?: boolean;
-  // TODO: expand
+  // TODO: expand (this comment copied from original compcon repo)
   ammo?: any[];
   no_mods?: boolean;
   no_bonuses?: boolean;

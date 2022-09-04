@@ -20,6 +20,7 @@ export type Mech = Omit<MechData, "frame" | "loadouts"> & {
   maxCoreEnergy: number;
   attackBonus: number;
   limitedSystemBonus: number;
+  hasIntegratedWeapon: boolean;
 };
 
 type SelectMech = (mechId: string) => (state: StoreState) => Mech | null;
@@ -34,11 +35,12 @@ function applyPilotSkills(mech: Mech, pilotData: PilotData): Mech {
     stats: {
       ...stats,
       hp: stats.hp + 2 * hull + grit,
-      repcap: stats.repcap + hull,
+      repcap: stats.repcap + Math.floor(hull / 2),
       evasion: stats.evasion + agility,
       edef: stats.edef + systems,
       tech_attack: stats.tech_attack + systems,
       heatcap: stats.heatcap + engineering,
+      save: stats.save + grit,
     },
     attackBonus: mech.attackBonus + grit,
     limitedSystemBonus: Math.floor(engineering / 2),
@@ -63,6 +65,7 @@ export const selectMech: SelectMech = (mechId) => (state) => {
 
   const loadouts = map(getLoadout, mechData.loadouts);
   const activeLoadout = loadouts[mechData.active_loadout_index];
+  const hasIntegratedWeapon = !!activeLoadout.integratedWeapon.slots[0].weapon;
 
   let mech: Mech = {
     ...mechData,
@@ -73,6 +76,7 @@ export const selectMech: SelectMech = (mechId) => (state) => {
     maxCoreEnergy: 1,
     attackBonus: 0,
     limitedSystemBonus: 0,
+    hasIntegratedWeapon,
   };
 
   mech = applyPilotSkills(mech, pilotData);

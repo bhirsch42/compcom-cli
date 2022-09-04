@@ -4,7 +4,7 @@ import { CounterData } from "../Counter";
 import { DeployableData } from "../Deployable";
 import { ActivationType, Duration } from "../enums";
 import { Synergy } from "../Synergy";
-import { Tag } from "../Tag";
+import { TagData } from "../Tag";
 
 export type CoreSystemData = {
   name: string;
@@ -26,5 +26,5 @@ export type CoreSystemData = {
   counters?: CounterData[];
   integrated?: string[];
   special_equipment?: string[];
-  tags: Tag[];
+  tags: TagData[];
 };

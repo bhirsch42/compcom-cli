@@ -4,6 +4,12 @@ import { useRouter } from "../Router";
 import useSelector from "../hooks/useSelector";
 import { selectMech } from "../store/selectors/selectMech";
 import Table from "../Table";
+import Section from "../Section";
+import MechTrait from "../MechTrait";
+import TypeyText from "../TypeyText";
+import MechMount from "../MechMount";
+import MechSystem from "../MechSystem";
+import BoxWithLabel from "../BoxWithLabel";
 
 const MechDetailsPage: React.FC = () => {
   const { currentPage } = useRouter();
@@ -13,13 +19,7 @@ const MechDetailsPage: React.FC = () => {
 
   if (!mech) return <Text>Could not find mech: {mechId}</Text>;
 
-  const mechInfoRows = [
-    ["ID", mech.id],
-    ["Name", mech.name],
-    ["Statuses", mech.statuses.join(", ")],
-    ["Conditions", mech.conditions.join(", ")],
-    ["Resistances", mech.resistances.join(", ")],
-  ];
+  const mechInfoRows = [["Size", mech.stats.size]];
 
   const mechResourcesRows = [
     ["Burn", mech.burn, "--"],
@@ -40,15 +40,69 @@ const MechDetailsPage: React.FC = () => {
     ["Evasion", mech.stats.evasion],
     ["Tech Attack", mech.stats.tech_attack],
     ["Attack Bonus", mech.attackBonus],
+    ["E-Defense", mech.stats.edef],
+    ["Sensor Range", mech.stats.sensor_range],
+    ["Save Target", mech.stats.save],
   ];
 
+  console.log(JSON.stringify(mech));
+
   return (
-    <Box flexDirection="column">
-      <Table rows={mechInfoRows} />
-      <Newline />
-      <Table rows={mechResourcesRows} />
-      <Newline />
-      <Table rows={mechAbilityRows} />
+    <Box>
+      <Box flexDirection="column" marginRight={2}>
+        <TypeyText bold italic>
+          {mech.frame.name.toUpperCase()} // {mech.name.toUpperCase()}
+        </TypeyText>
+        <Box>
+          <Section title={"Statuses"} marginRight={2}>
+            <Text>{mech.statuses.join(", ")}</Text>
+          </Section>
+          <Section title={"Conditions"} marginRight={2}>
+            <Text>{mech.conditions.join(", ")}</Text>
+          </Section>
+          <Section title={"Resistances"} marginRight={2}>
+            <Text>{mech.resistances.join(", ")}</Text>
+          </Section>
+        </Box>
+        <Box>
+          <Section title={"Burn"} marginRight={2}>
+            <Text>{mech.burn}</Text>
+          </Section>
+          <Section title={"Movement"} marginRight={2}>
+            <Text>
+              {mech.current_move}/{mech.stats.speed}
+            </Text>
+          </Section>
+          <Section title={"Structure"} marginRight={2}>
+            <Text>
+              {mech.current_structure}/{mech.stats.structure}
+            </Text>
+          </Section>
+        </Box>
+
+        <Section title={"Traits"}>
+          {mech.frame.traits.map((trait) => (
+            <MechTrait trait={trait} key={trait.name} />
+          ))}
+        </Section>
+      </Box>
+      <Box flexDirection="column" minWidth={60}>
+        <Section title={"Active Loadout"} marginRight={2} paddingTop={0}>
+          <BoxWithLabel label="SYSTEMS">
+            {mech.activeLoadout.systems.map((system, i) => (
+              <MechSystem system={system} key={i} />
+            ))}
+          </BoxWithLabel>
+
+          {mech.hasIntegratedWeapon && (
+            <MechMount mount={mech.activeLoadout.integratedWeapon} />
+          )}
+
+          {mech.activeLoadout.mounts.map((mount, i) => (
+            <MechMount mount={mount} key={i} />
+          ))}
+        </Section>
+      </Box>
     </Box>
   );
 };
